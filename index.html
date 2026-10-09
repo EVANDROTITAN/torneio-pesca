@@ -899,35 +899,80 @@ body.public-view::before{
 }
 
 
-/* ===== FIREBASE • RANKING AO VIVO v7.3 ===== */
-#cloud-login-overlay{display:none;position:fixed;inset:0;z-index:10050;background:rgba(2,22,25,.90);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:18px}
-html.cloud-admin-pending #cloud-login-overlay,body.cloud-admin-mode:not(.cloud-authenticated) #cloud-login-overlay{display:flex!important}
-.cloud-login-card{width:min(94vw,430px);background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.36);padding:22px}
-.cloud-login-card h2{margin:0 0 6px;font-size:1.15rem}.cloud-login-card p{margin:0 0 16px;color:var(--muted);font-size:.84rem;line-height:1.45}
-.cloud-login-card label{display:block;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 0 6px}
-.cloud-login-card input{width:100%;box-sizing:border-box;border:1px solid var(--border);background:var(--input);color:var(--text);border-radius:11px;padding:12px 13px;font:inherit;outline:none}
-.cloud-login-card input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(12,126,137,.12)}
-.cloud-login-actions{display:flex;gap:8px;margin-top:16px}.cloud-login-actions .btn{flex:1}
-#cloud-login-error{display:none;margin-top:10px;color:#dc3545;font-size:.78rem;font-weight:800}#cloud-loading-note{margin-top:9px;color:var(--muted);font-size:.72rem}
-#cloud-toolbar{display:none;position:fixed;right:14px;bottom:14px;z-index:9300;background:rgba(4,45,49,.96);color:#fff;border:1px solid rgba(143,233,223,.25);border-radius:14px;padding:8px;box-shadow:0 15px 38px rgba(0,0,0,.26);align-items:center;gap:7px;flex-wrap:wrap;max-width:min(92vw,680px)}
-body.cloud-admin-mode.cloud-authenticated #cloud-toolbar{display:flex}.cloud-dot{width:9px;height:9px;border-radius:50%;background:#f0ad4e;display:inline-block}.cloud-dot.ok{background:#20c77a}.cloud-dot.err{background:#e55353}.cloud-dot.busy{background:#f0ad4e}
-#cloud-status-text{font-size:.72rem;font-weight:850;white-space:nowrap}#cloud-toolbar .btn{padding:7px 9px;font-size:.7rem}body.public-view #cloud-toolbar{display:none!important}
-.cloud-live-note{display:none;position:fixed;left:12px;bottom:12px;z-index:80;padding:6px 9px;border-radius:999px;background:rgba(4,45,49,.9);color:#d7fffa;border:1px solid rgba(143,233,223,.22);font-size:.62rem;font-weight:900}
-body.public-view.cloud-data-live .cloud-live-note{display:block}
-@media(max-width:760px){#cloud-toolbar{right:8px;bottom:42px;max-width:calc(100vw - 16px)}.cloud-login-card{padding:18px}.cloud-live-note{left:8px;bottom:36px;font-size:.56rem}}
+/* ===== FIREBASE AO VIVO v7.4 ===== */
+#firebase-admin-gate{
+  display:none;
+  position:fixed;inset:0;z-index:999999;
+  background:rgba(1,18,21,.94);
+  backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;
+  padding:20px;
+}
+#firebase-admin-gate.is-open{display:flex!important}
+.firebase-login-card{
+  width:min(94vw,430px);
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:20px;
+  box-shadow:0 28px 80px rgba(0,0,0,.45);
+  padding:24px;
+}
+.firebase-login-card h2{margin:0 0 7px;font-size:1.18rem}
+.firebase-login-card p{margin:0 0 16px;color:var(--muted);font-size:.84rem;line-height:1.45}
+.firebase-login-card label{
+  display:block;margin:12px 0 6px;
+  font-size:.68rem;font-weight:900;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--muted)
+}
+.firebase-login-card input{
+  width:100%;box-sizing:border-box;
+  border:1px solid var(--border);background:var(--input);
+  color:var(--text);border-radius:11px;padding:12px 13px;
+  font:inherit;outline:none
+}
+.firebase-login-card input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(12,126,137,.12)
+}
+#firebase-login-error{
+  display:none;margin-top:10px;
+  color:#e55353;font-size:.78rem;font-weight:850
+}
+#firebase-login-status{
+  margin-top:9px;color:var(--muted);font-size:.72rem
+}
+#firebase-login-btn{width:100%;margin-top:16px}
+#firebase-live-toolbar{
+  display:none;position:fixed;right:14px;bottom:14px;z-index:9500;
+  background:rgba(4,45,49,.97);color:#fff;
+  border:1px solid rgba(143,233,223,.25);
+  border-radius:14px;padding:8px;
+  box-shadow:0 15px 38px rgba(0,0,0,.26);
+  gap:7px;align-items:center;flex-wrap:wrap;
+  max-width:min(92vw,700px)
+}
+body.firebase-admin-authenticated #firebase-live-toolbar{display:flex}
+body.public-view #firebase-live-toolbar{display:none!important}
+.firebase-cloud-dot{width:9px;height:9px;border-radius:50%;background:#f0ad4e}
+.firebase-cloud-dot.ok{background:#20c77a}
+.firebase-cloud-dot.err{background:#e55353}
+#firebase-live-status{font-size:.72rem;font-weight:850;white-space:nowrap}
+#firebase-live-toolbar .btn{padding:7px 9px;font-size:.7rem}
+.firebase-public-live{
+  display:none;position:fixed;left:12px;bottom:12px;z-index:90;
+  padding:6px 9px;border-radius:999px;
+  background:rgba(4,45,49,.9);color:#d7fffa;
+  border:1px solid rgba(143,233,223,.22);
+  font-size:.62rem;font-weight:900
+}
+body.public-view.firebase-live-connected .firebase-public-live{display:block}
+@media(max-width:760px){
+  #firebase-live-toolbar{right:8px;bottom:42px;max-width:calc(100vw - 16px)}
+  .firebase-login-card{padding:18px}
+  .firebase-public-live{left:8px;bottom:36px;font-size:.56rem}
+}
 
 </style>
-
-<script>
-(function(){
-  try{
-    if(new URLSearchParams(location.search).get('admin')==='1'){
-      document.documentElement.classList.add('cloud-admin-pending');
-    }
-  }catch(e){}
-})();
-</script>
-
 </head>
 <body>
 <div class="container">
@@ -2264,55 +2309,266 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 </script>
 
 
-<div id="cloud-login-overlay">
-  <div class="cloud-login-card">
+<div id="firebase-admin-gate" aria-modal="true" role="dialog">
+  <div class="firebase-login-card">
     <h2>🔐 Administrador do torneio</h2>
-    <p>Entre com o e-mail e a senha cadastrados no Firebase para alterar e publicar o ranking ao vivo.</p>
-    <label for="cloud-email">E-mail</label>
-    <input id="cloud-email" type="email" autocomplete="username" placeholder="seu@email.com">
-    <label for="cloud-password">Senha</label>
-    <input id="cloud-password" type="password" autocomplete="current-password" placeholder="••••••••">
-    <div id="cloud-login-error"></div>
-    <div id="cloud-loading-note">Conectando ao Firebase...</div>
-    <div class="cloud-login-actions"><button class="btn btn-primary" id="cloud-login-btn" type="button">Entrar</button></div>
+    <p>Entre com o e-mail e a senha cadastrados no Firebase para alterar o ranking ao vivo.</p>
+    <label for="firebase-admin-email">E-mail</label>
+    <input id="firebase-admin-email" type="email" autocomplete="username" placeholder="seu@email.com">
+    <label for="firebase-admin-password">Senha</label>
+    <input id="firebase-admin-password" type="password" autocomplete="current-password" placeholder="••••••••">
+    <div id="firebase-login-error"></div>
+    <div id="firebase-login-status">Preparando login...</div>
+    <button class="btn btn-primary" id="firebase-login-btn" type="button">Entrar</button>
   </div>
 </div>
-<div id="cloud-toolbar">
-  <span class="cloud-dot busy" id="cloud-dot"></span><span id="cloud-status-text">Conectando...</span>
-  <button class="btn btn-secondary" id="cloud-publish-btn" type="button">☁️ Enviar dados atuais</button>
-  <button class="btn btn-secondary" id="cloud-load-btn" type="button">⬇ Carregar da nuvem</button>
-  <button class="btn btn-secondary" id="cloud-logout-btn" type="button">Sair</button>
+
+<div id="firebase-live-toolbar">
+  <span class="firebase-cloud-dot" id="firebase-cloud-dot"></span>
+  <span id="firebase-live-status">Conectando...</span>
+  <button class="btn btn-secondary" id="firebase-send-btn" type="button">☁️ Enviar dados atuais</button>
+  <button class="btn btn-secondary" id="firebase-load-btn" type="button">⬇ Carregar da nuvem</button>
+  <button class="btn btn-secondary" id="firebase-logout-btn" type="button">Sair</button>
 </div>
-<div class="cloud-live-note">● RANKING SINCRONIZADO AO VIVO</div>
+<div class="firebase-public-live">● RANKING AO VIVO</div>
+
+<script>
+(function(){
+  try{
+    const isAdmin = new URLSearchParams(location.search).get('admin') === '1';
+    if(isAdmin){
+      const gate = document.getElementById('firebase-admin-gate');
+      if(gate) gate.classList.add('is-open');
+      document.body.classList.add('firebase-admin-mode');
+    }
+  }catch(e){}
+})();
+</script>
 
 
 <script>
 (function(){
-  const CFG={"apiKey": "AIzaSyD0K-zOrV7jGxahvlbs6NU6tuxKXt99q0g", "authDomain": "torneio-pesca.firebaseapp.com", "databaseURL": "https://torneio-pesca-default-rtdb.firebaseio.com", "projectId": "torneio-pesca", "storageBucket": "torneio-pesca.firebasestorage.app", "messagingSenderId": "151284029680", "appId": "1:151284029680:web:7230b351e0019769638a35"},PATH='rankingAtual';let sdk=null,db=null,auth=null,user=null,ready=false,applying=false,timer=null;
-  const admin=()=>{try{return new URLSearchParams(location.search).get('admin')==='1'}catch(e){return false}};
-  const pub=()=>{try{const p=new URLSearchParams(location.search);if(p.get('admin')==='1')return false;return p.get('public')==='1'||(location.hostname||'').toLowerCase().endsWith('.github.io')}catch(e){return false}};
-  const key=()=>typeof STORAGE_KEY!=='undefined'?STORAGE_KEY:'pescaUltra2025_tablet';
-  function status(m,s='busy'){const t=document.getElementById('cloud-status-text'),d=document.getElementById('cloud-dot');if(t)t.textContent=m;if(d){d.classList.remove('ok','err','busy');d.classList.add(s)}}
-  function errtxt(e){const c=e?.code||'';if(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))return'E-mail ou senha inválidos.';if(c.includes('too-many-requests'))return'Muitas tentativas. Aguarde um pouco.';if(c.includes('unauthorized-domain'))return'Este domínio não está autorizado no Firebase.';if(c.includes('network-request-failed'))return'Falha de internet.';return e?.message||'Não foi possível concluir.'}
-  function localState(){try{return JSON.parse(localStorage.getItem(key())||'null')}catch(e){return null}}
-  function apply(st,updatedAt){if(!st||typeof st!=='object')return;applying=true;try{localStorage.setItem(key(),JSON.stringify(st));if(typeof carregarDoStorage==='function')carregarDoStorage();if(typeof safeApplyPublicView==='function')safeApplyPublicView();document.body.classList.add('cloud-data-live');const live=document.querySelector('.live-badge');if(live&&pub())live.innerHTML='<span class="live-dot"></span> ranking ao vivo';if(updatedAt){const last=document.getElementById('last-update');if(last)last.textContent=new Date(updatedAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}}finally{setTimeout(()=>applying=false,0)}}
-  async function write(show=true){if(!ready||!user)return false;const st=localState();if(!st){if(show)alert('Não há dados locais para enviar.');return false}try{status('Enviando para a nuvem...');await sdk.set(sdk.ref(db,PATH),{state:st,updatedAt:Date.now()});status('Sincronizado agora','ok');if(show&&typeof toast==='function')toast('Ranking enviado para a nuvem.');return true}catch(e){status('Erro ao salvar','err');if(show)alert('Erro ao salvar: '+errtxt(e));return false}}
-  function schedule(){if(applying||!ready||!user||!admin())return;clearTimeout(timer);status('Alterações pendentes...');timer=setTimeout(()=>write(false),650)}
-  async function load(show=true){if(!ready)return false;try{status('Carregando da nuvem...');const s=await sdk.get(sdk.ref(db,PATH));if(!s.exists()){status('Nuvem vazia');if(show)alert('Ainda não há ranking salvo na nuvem.');return false}const v=s.val();apply(v?.state||v,v?.updatedAt);status('Dados carregados','ok');return true}catch(e){status('Erro ao carregar','err');if(show)alert('Erro ao carregar: '+errtxt(e));return false}}
-  function subscribe(){sdk.onValue(sdk.ref(db,PATH),s=>{if(!s.exists())return;const v=s.val();apply(v?.state||v,v?.updatedAt)},e=>console.error('Firebase live',e))}
-  async function login(){const em=(document.getElementById('cloud-email')?.value||'').trim(),pw=document.getElementById('cloud-password')?.value||'',box=document.getElementById('cloud-login-error');if(box){box.style.display='none';box.textContent=''}if(!em||!pw){if(box){box.textContent='Informe e-mail e senha.';box.style.display='block'};return}try{await sdk.signInWithEmailAndPassword(auth,em,pw);localStorage.setItem('pescaFirebaseAdminEmail',em)}catch(e){if(box){box.textContent=errtxt(e);box.style.display='block'}}}
-  async function boot(){
-    if(admin()){document.body.classList.add('cloud-admin-mode');document.documentElement.classList.add('cloud-admin-pending')}
-    const note=document.getElementById('cloud-loading-note');
-    try{
-      const [a,au,d]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js'),import('https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js')]);
-      const app=a.initializeApp(CFG);auth=au.getAuth(app);db=d.getDatabase(app);sdk={signInWithEmailAndPassword:au.signInWithEmailAndPassword,signOut:au.signOut,ref:d.ref,set:d.set,get:d.get,onValue:d.onValue};ready=true;if(note)note.textContent='Firebase conectado.';
-      if(pub()){subscribe();return}
-      if(admin()){const ei=document.getElementById('cloud-email');if(ei)ei.value=localStorage.getItem('pescaFirebaseAdminEmail')||'';au.onAuthStateChanged(auth,async u=>{user=u||null;if(u){document.body.classList.add('cloud-authenticated');document.documentElement.classList.remove('cloud-admin-pending');status('Administrador conectado','ok');await load(false)}else{document.body.classList.remove('cloud-authenticated');document.documentElement.classList.add('cloud-admin-pending');status('Login necessário')}})}
-    }catch(e){console.error('Firebase boot',e);if(note)note.textContent='Não consegui conectar ao Firebase.';const box=document.getElementById('cloud-login-error');if(box&&admin()){box.textContent='Falha ao iniciar o Firebase. Verifique a internet e recarregue.';box.style.display='block'}}
+  const CFG={"apiKey": "AIzaSyD0K-zOrV7jGxahvlbs6NU6tuxKXt99q0g", "authDomain": "torneio-pesca.firebaseapp.com", "databaseURL": "https://torneio-pesca-default-rtdb.firebaseio.com", "projectId": "torneio-pesca", "storageBucket": "torneio-pesca.firebasestorage.app", "messagingSenderId": "151284029680", "appId": "1:151284029680:web:7230b351e0019769638a35"};
+  const PATH='rankingAtual';
+  let sdk=null, db=null, auth=null, user=null, ready=false, applying=false, timer=null;
+
+  function isAdmin(){
+    try{return new URLSearchParams(location.search).get('admin')==='1'}catch(e){return false}
   }
-  function wire(){document.getElementById('cloud-login-btn')?.addEventListener('click',login);document.getElementById('cloud-password')?.addEventListener('keydown',e=>{if(e.key==='Enter')login()});document.getElementById('cloud-publish-btn')?.addEventListener('click',()=>write(true));document.getElementById('cloud-load-btn')?.addEventListener('click',()=>load(true));document.getElementById('cloud-logout-btn')?.addEventListener('click',async()=>{try{await sdk?.signOut(auth)}catch(e){}});if(typeof salvarTudo==='function'){const orig=salvarTudo;salvarTudo=function(){orig();schedule()}}boot()}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
+  function isPublic(){
+    try{
+      const p=new URLSearchParams(location.search);
+      if(p.get('admin')==='1')return false;
+      return p.get('public')==='1'||(location.hostname||'').toLowerCase().endsWith('.github.io');
+    }catch(e){return false}
+  }
+  function storageKey(){
+    return typeof STORAGE_KEY!=='undefined' ? STORAGE_KEY : 'pescaUltra2025_tablet';
+  }
+  function setGate(open){
+    const gate=document.getElementById('firebase-admin-gate');
+    if(gate)gate.classList.toggle('is-open',!!open);
+  }
+  function setCloudStatus(msg,state='busy'){
+    const t=document.getElementById('firebase-live-status');
+    const d=document.getElementById('firebase-cloud-dot');
+    if(t)t.textContent=msg;
+    if(d){
+      d.classList.remove('ok','err');
+      if(state==='ok')d.classList.add('ok');
+      if(state==='err')d.classList.add('err');
+    }
+  }
+  function friendlyError(err){
+    const c=err?.code||'';
+    if(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))return'E-mail ou senha inválidos.';
+    if(c.includes('too-many-requests'))return'Muitas tentativas. Aguarde um pouco.';
+    if(c.includes('unauthorized-domain'))return'Este domínio não está autorizado no Firebase.';
+    if(c.includes('network-request-failed'))return'Falha de internet.';
+    return err?.message||'Não foi possível concluir.';
+  }
+  function readLocalState(){
+    try{return JSON.parse(localStorage.getItem(storageKey())||'null')}catch(e){return null}
+  }
+  function applyRemoteState(state,updatedAt){
+    if(!state||typeof state!=='object')return;
+    applying=true;
+    try{
+      localStorage.setItem(storageKey(),JSON.stringify(state));
+      if(typeof carregarDoStorage==='function')carregarDoStorage();
+      if(typeof safeApplyPublicView==='function')safeApplyPublicView();
+      document.body.classList.add('firebase-live-connected');
+      const live=document.querySelector('.live-badge');
+      if(live&&isPublic())live.innerHTML='<span class="live-dot"></span> ranking ao vivo';
+      if(updatedAt){
+        const el=document.getElementById('last-update');
+        if(el)el.textContent=new Date(updatedAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      }
+    }finally{
+      setTimeout(()=>{applying=false},0);
+    }
+  }
+  async function sendNow(showMessage=true){
+    if(!ready||!user){
+      if(showMessage)alert('Faça login como administrador primeiro.');
+      return false;
+    }
+    const state=readLocalState();
+    if(!state){
+      if(showMessage)alert('Não há dados locais para enviar.');
+      return false;
+    }
+    try{
+      setCloudStatus('Enviando para a nuvem...');
+      await sdk.set(sdk.ref(db,PATH),{state,updatedAt:Date.now()});
+      setCloudStatus('Sincronizado agora','ok');
+      if(showMessage&&typeof toast==='function')toast('Ranking enviado para a nuvem.');
+      return true;
+    }catch(err){
+      setCloudStatus('Erro ao salvar','err');
+      if(showMessage)alert('Erro ao salvar: '+friendlyError(err));
+      return false;
+    }
+  }
+  function scheduleSend(){
+    if(applying||!ready||!user||!isAdmin())return;
+    clearTimeout(timer);
+    setCloudStatus('Alterações pendentes...');
+    timer=setTimeout(()=>sendNow(false),700);
+  }
+  async function loadCloud(showMessage=true){
+    if(!ready)return false;
+    try{
+      setCloudStatus('Carregando da nuvem...');
+      const snap=await sdk.get(sdk.ref(db,PATH));
+      if(!snap.exists()){
+        setCloudStatus('Nuvem vazia');
+        if(showMessage)alert('Ainda não há ranking salvo na nuvem.');
+        return false;
+      }
+      const v=snap.val();
+      applyRemoteState(v?.state||v,v?.updatedAt);
+      setCloudStatus('Dados carregados','ok');
+      return true;
+    }catch(err){
+      setCloudStatus('Erro ao carregar','err');
+      if(showMessage)alert('Erro ao carregar: '+friendlyError(err));
+      return false;
+    }
+  }
+  function subscribePublic(){
+    sdk.onValue(
+      sdk.ref(db,PATH),
+      snap=>{
+        if(!snap.exists())return;
+        const v=snap.val();
+        applyRemoteState(v?.state||v,v?.updatedAt);
+      },
+      err=>console.error('Firebase realtime:',err)
+    );
+  }
+  async function doLogin(){
+    const email=(document.getElementById('firebase-admin-email')?.value||'').trim();
+    const password=document.getElementById('firebase-admin-password')?.value||'';
+    const errorBox=document.getElementById('firebase-login-error');
+    const statusBox=document.getElementById('firebase-login-status');
+    if(errorBox){errorBox.style.display='none';errorBox.textContent=''}
+    if(!ready){
+      if(errorBox){errorBox.textContent='Firebase ainda está conectando. Aguarde alguns segundos.';errorBox.style.display='block'}
+      return;
+    }
+    if(!email||!password){
+      if(errorBox){errorBox.textContent='Informe e-mail e senha.';errorBox.style.display='block'}
+      return;
+    }
+    try{
+      if(statusBox)statusBox.textContent='Entrando...';
+      await sdk.signInWithEmailAndPassword(auth,email,password);
+      localStorage.setItem('pescaFirebaseAdminEmail',email);
+    }catch(err){
+      if(statusBox)statusBox.textContent='Firebase conectado.';
+      if(errorBox){errorBox.textContent=friendlyError(err);errorBox.style.display='block'}
+    }
+  }
+  async function boot(){
+    const statusBox=document.getElementById('firebase-login-status');
+    try{
+      const [appMod,authMod,dbMod]=await Promise.all([
+        import('https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js')
+      ]);
+      const app=appMod.initializeApp(CFG);
+      auth=authMod.getAuth(app);
+      db=dbMod.getDatabase(app);
+      sdk={
+        signInWithEmailAndPassword:authMod.signInWithEmailAndPassword,
+        signOut:authMod.signOut,
+        onAuthStateChanged:authMod.onAuthStateChanged,
+        ref:dbMod.ref,set:dbMod.set,get:dbMod.get,onValue:dbMod.onValue
+      };
+      ready=true;
+      if(statusBox)statusBox.textContent='Firebase conectado.';
+
+      if(isPublic()){
+        subscribePublic();
+        return;
+      }
+
+      if(isAdmin()){
+        const emailInput=document.getElementById('firebase-admin-email');
+        if(emailInput)emailInput.value=localStorage.getItem('pescaFirebaseAdminEmail')||'';
+
+        sdk.onAuthStateChanged(auth,async currentUser=>{
+          user=currentUser||null;
+          if(user){
+            document.body.classList.add('firebase-admin-authenticated');
+            setGate(false);
+            setCloudStatus('Administrador conectado','ok');
+            await loadCloud(false);
+          }else{
+            document.body.classList.remove('firebase-admin-authenticated');
+            setGate(true);
+            setCloudStatus('Login necessário');
+          }
+        });
+      }
+    }catch(err){
+      console.error('Firebase boot:',err);
+      if(statusBox)statusBox.textContent='Não consegui conectar ao Firebase.';
+      const errorBox=document.getElementById('firebase-login-error');
+      if(errorBox&&isAdmin()){
+        errorBox.textContent='Falha ao iniciar o Firebase. Verifique a internet e recarregue a página.';
+        errorBox.style.display='block';
+      }
+      setGate(isAdmin());
+    }
+  }
+  function wire(){
+    if(isAdmin())setGate(true);
+
+    document.getElementById('firebase-login-btn')?.addEventListener('click',doLogin);
+    document.getElementById('firebase-admin-password')?.addEventListener('keydown',e=>{
+      if(e.key==='Enter')doLogin();
+    });
+    document.getElementById('firebase-send-btn')?.addEventListener('click',()=>sendNow(true));
+    document.getElementById('firebase-load-btn')?.addEventListener('click',()=>loadCloud(true));
+    document.getElementById('firebase-logout-btn')?.addEventListener('click',async()=>{
+      try{await sdk?.signOut(auth)}catch(e){}
+    });
+
+    if(typeof salvarTudo==='function'){
+      const originalSave=salvarTudo;
+      salvarTudo=function(){
+        originalSave();
+        scheduleSend();
+      };
+    }
+    boot();
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);
+  else wire();
 })();
 </script>
 
