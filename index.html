@@ -849,7 +849,6 @@
 
 /* ===== MODO PÚBLICO SOMENTE LEITURA ===== */
 body.public-mode .config-panel,
-body.public-mode .dashboard,
 body.public-mode .controls-left,
 body.public-mode #btn-min-menu,
 body.public-mode #minimal-menu-overlay,
@@ -868,6 +867,16 @@ body.public-mode #btn-display,
 body.public-mode #btn-fullscreen,
 body.public-mode #btn-summary,
 body.public-mode .toggle{display:none!important}
+
+body.public-mode .dashboard{display:block!important}
+body.public-mode .official-podium-wrap,
+body.public-mode .minimal-filterbar,
+body.public-mode .table-card,
+body.public-mode .table-wrap,
+body.public-mode #tabela-corpo{visibility:visible!important;opacity:1!important}
+body.public-mode .controls{display:flex!important}
+body.public-mode .controls-right{display:flex!important}
+
 body.public-mode .tournament-header{grid-template-columns:1fr}
 body.public-mode .controls{justify-content:flex-end;padding-top:6px}
 body.public-mode .controls-right{width:100%;justify-content:flex-end}
