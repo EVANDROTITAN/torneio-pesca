@@ -847,64 +847,56 @@
 .share-modal-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}.share-card{border:1px solid var(--border);background:var(--panel);border-radius:16px;padding:16px}.share-card h3{margin:0 0 8px;font-size:1rem}.public-url-row{display:flex;gap:8px}.public-url-row input{flex:1}.qr-box{display:flex;align-items:center;justify-content:center;min-height:230px;border:1px dashed var(--border);border-radius:16px;background:var(--bg);padding:16px}.qr-box img{width:210px;height:210px;border-radius:12px;background:#fff;padding:8px}.qr-empty{text-align:center;color:var(--muted);font-weight:800;max-width:260px}.social-preview{display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#061f23,#0a353a);border-radius:16px;min-height:250px;padding:14px}.social-preview canvas{width:min(100%,430px);height:auto;border-radius:12px;box-shadow:0 18px 45px rgba(0,0,0,.28)}.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.report-note{font-size:.78rem;color:var(--muted);font-weight:750;line-height:1.45;margin-top:8px}.report-hero{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.report-podium{border:1px solid #d9e6e3;border-radius:16px;padding:14px;text-align:center}.report-podium.first{border:2px solid #d8ad24;background:#fff9de}.report-avatar{width:86px;height:86px;border-radius:50%;object-fit:cover;background:#eef4f2;margin:auto;display:block}.report-table{width:100%;border-collapse:collapse;margin-top:16px}.report-table th,.report-table td{padding:9px 8px;border-bottom:1px solid #dfe8e6;text-align:left;font-size:12px}.report-table th{background:#0c5962;color:#fff}.report-title{font-size:26px;margin:0}.report-sub{color:#657a7d;font-size:12px;margin-top:5px}.report-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.report-badge{border:1px solid #dce7e5;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800}.menu-badge-new{font-size:.58rem;background:#e77d19;color:#fff;padding:2px 5px;border-radius:999px;margin-left:4px;vertical-align:2px}.public-link-chip{display:none;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.16);padding:5px 8px;border-radius:999px;font-size:.7rem;font-weight:850}.public-link-chip.show{display:inline-flex}@media(max-width:760px){.share-modal-grid{grid-template-columns:1fr}.report-hero{grid-template-columns:1fr}.public-url-row{flex-direction:column}}
 
 
-/* ===== MODO PÚBLICO SOMENTE LEITURA ===== */
-body.public-mode .config-panel,
-body.public-mode .controls-left,
-body.public-mode #btn-min-menu,
-body.public-mode #minimal-menu-overlay,
-body.public-mode #public-link-chip,
-body.public-mode .save-state,
-body.public-mode .edit-profile,
-body.public-mode .del-btn,
-body.public-mode #btn-add,
-body.public-mode #btn-awards,
-body.public-mode #btn-history,
-body.public-mode #btn-export,
-body.public-mode #btn-print,
-body.public-mode #btn-toggle-progress,
-body.public-mode #btn-giant,
-body.public-mode #btn-display,
-body.public-mode #btn-fullscreen,
-body.public-mode #btn-summary,
-body.public-mode .toggle{display:none!important}
+/* ===== MODO PÚBLICO SEGURO ===== */
+body.public-view #btn-min-menu,
+body.public-view #minimal-menu-overlay,
+body.public-view #btn-add,
+body.public-view #btn-awards,
+body.public-view #btn-history,
+body.public-view #btn-export,
+body.public-view #btn-print,
+body.public-view #btn-toggle-progress,
+body.public-view #btn-giant,
+body.public-view #btn-display,
+body.public-view #btn-fullscreen,
+body.public-view #btn-summary,
+body.public-view #public-link-chip,
+body.public-view .save-state,
+body.public-view .config-panel,
+body.public-view .edit-profile,
+body.public-view .del-btn,
+body.public-view .toggle,
+body.public-view #competitor-modal,
+body.public-view #history-modal,
+body.public-view #public-ranking-modal,
+body.public-view #social-card-modal{display:none!important}
 
-body.public-mode .dashboard{display:block!important}
-body.public-mode .official-podium-wrap,
-body.public-mode .minimal-filterbar,
-body.public-mode .table-card,
-body.public-mode .table-wrap,
-body.public-mode #tabela-corpo{visibility:visible!important;opacity:1!important}
-body.public-mode .controls{display:flex!important}
-body.public-mode .controls-right{display:flex!important}
+body.public-view th:last-child,
+body.public-view td:last-child{display:none!important}
 
-body.public-mode .tournament-header{grid-template-columns:1fr}
-body.public-mode .controls{justify-content:flex-end;padding-top:6px}
-body.public-mode .controls-right{width:100%;justify-content:flex-end}
-body.public-mode .controls-right #search{display:block;max-width:420px;width:min(100%,420px)}
-body.public-mode .subhint{display:none}
-body.public-mode .strip-left span:last-child{font-weight:900}
-body.public-mode .live-badge{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.16)}
-body.public-mode .input-name,
-body.public-mode .input-peixe{pointer-events:none;cursor:default!important;background:transparent!important;border-color:transparent!important;box-shadow:none!important}
-body.public-mode .input-name{font-weight:900}
-body.public-mode th:last-child,
-body.public-mode td:last-child{display:none!important}
-body.public-mode .minimal-filterbar{margin-top:6px}
-body.public-mode .official-podium-wrap{margin-top:10px}
-body.public-mode .championship-strip{position:sticky;top:0;z-index:30}
-
-body.public-mode #competitor-modal,
-body.public-mode #history-modal,
-body.public-mode #public-ranking-modal,
-body.public-mode #social-card-modal{display:none!important}
-body.public-mode [contenteditable="true"]{pointer-events:none!important}
-body.public-mode .input-name,
-body.public-mode .input-peixe,
-body.public-mode .input-total,
-body.public-mode .input-maior-peixe{user-select:none}
-
-body.public-mode::before{content:'MODO PÚBLICO • SOMENTE LEITURA';position:fixed;right:16px;bottom:14px;z-index:50;background:rgba(4,45,49,.92);color:#d7fffa;border:1px solid rgba(143,233,223,.28);padding:8px 11px;border-radius:999px;font-size:.68rem;font-weight:900;letter-spacing:.04em;box-shadow:0 8px 24px rgba(0,0,0,.18)}
-@media(max-width:760px){body.public-mode::before{right:8px;bottom:8px;font-size:.58rem;padding:6px 8px}body.public-mode .controls-right #search{max-width:none}}
+body.public-view .input-name,
+body.public-view .input-peixe{
+  pointer-events:none!important;
+  cursor:default!important;
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+body.public-view .input-name{font-weight:900}
+body.public-view .subhint{display:none!important}
+body.public-view .tournament-title{pointer-events:none!important}
+body.public-view::before{
+  content:'MODO PÚBLICO • SOMENTE LEITURA';
+  position:fixed;right:14px;bottom:12px;z-index:100;
+  background:rgba(4,45,49,.92);color:#d7fffa;
+  border:1px solid rgba(143,233,223,.28);
+  padding:7px 10px;border-radius:999px;
+  font-size:.66rem;font-weight:900;letter-spacing:.04em;
+  box-shadow:0 8px 24px rgba(0,0,0,.18)
+}
+@media(max-width:760px){
+  body.public-view::before{right:8px;bottom:8px;font-size:.56rem;padding:6px 8px}
+}
 
 </style>
 </head>
@@ -1832,7 +1824,7 @@ body.public-mode::before{content:'MODO PÚBLICO • SOMENTE LEITURA';position:fi
       <div class="share-card">
         <h3>Link público do ranking</h3>
         <div class="public-url-row"><input id="public-ranking-url" type="url" placeholder="https://seu-ranking.pages.dev ou github.io/..."/><button class="btn btn-primary" id="btn-save-public-url" type="button">Salvar link</button></div>
-        <div class="report-note">O QR Code abre automaticamente o <b>modo público somente leitura</b>. Você informa apenas o endereço principal do site; o sistema acrescenta <code>?public=1</code> no QR. O link fica salvo apenas neste navegador.</div>
+        <div class="report-note">O QR Code só funciona para outras pessoas quando este HTML/ranking estiver publicado na internet. O link fica salvo apenas neste navegador.</div>
         <div class="action-row"><button class="btn btn-secondary" id="btn-copy-public-url" type="button">📋 Copiar link</button><button class="btn btn-secondary" id="btn-share-public-url" type="button">📤 Compartilhar link</button><button class="btn btn-secondary" id="btn-open-public-url" type="button">↗ Abrir ranking</button></div>
       </div>
       <div class="share-card"><h3>QR Code para o público</h3><div class="qr-box" id="qr-box"><div class="qr-empty">Salve o endereço público acima para gerar o QR Code.</div></div><div class="action-row"><button class="btn btn-secondary" id="btn-download-qr" type="button">⬇ Baixar QR</button></div></div>
@@ -2100,8 +2092,7 @@ function openFinalReport(){
     alert('Não consegui gerar o relatório final. Erro: '+(err?.message||err));
   }
 }
-function publicBaseUrl(){return (qs('#public-ranking-url')?.value||localStorage.getItem(PUBLIC_URL_KEY)||'').trim()}
-function publicUrl(){const raw=publicBaseUrl();if(!raw)return '';try{const u=new URL(raw);u.searchParams.set('public','1');return u.toString()}catch(e){return raw+(raw.includes('?')?'&':'?')+'public=1'}}
+function publicUrl(){return (qs('#public-ranking-url')?.value||localStorage.getItem(PUBLIC_URL_KEY)||'').trim()}
 function updatePublicUrlUI(){
   const url=publicUrl(), chip=qs('#public-link-chip'), box=qs('#qr-box');
   if(chip)chip.classList.toggle('show',!!url);
@@ -2142,105 +2133,6 @@ async function nativeShareCard(){await drawSocialCard();const b=await canvasBlob
 async function copySocialCaption(){const caption=socialCaption();try{await navigator.clipboard.writeText(caption);toast('Legenda copiada.')}catch(e){prompt('Copie a legenda abaixo:',caption)}}
 async function whatsappShare(){await drawSocialCard();const b=await canvasBlob();if(!b)return;const fmt=getSocialFormat();const caption=socialCaption();const f=new File([b],safeFileName((qs('#titulo-torneio')?.innerText||'torneio')+'_top3_'+fmt.file)+'.png',{type:'image/png'});try{if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[f]}))){await navigator.share({title:(qs('#titulo-torneio')?.innerText||'Resultado').trim(),text:caption,files:[f]});return}}catch(e){if(e.name==='AbortError')return}try{await navigator.clipboard.writeText(caption);toast('Legenda copiada e imagem baixada. No WhatsApp Web, anexe a imagem baixada e cole a legenda.')}catch(e){toast('Imagem baixada. No WhatsApp Web, anexe a imagem e escreva a legenda.')}await downloadSocialCard();window.open('https://wa.me/?text='+encodeURIComponent(caption),'_blank')}
 function setSocialFormat(fmt){if(!SOCIAL_FORMATS[fmt])return;currentSocialFormat=fmt;updateSocialFormatUI();drawSocialCard()}
-
-function isPublicMode(){
-  try{
-    const params=new URLSearchParams(location.search);
-    if(params.get('admin')==='1') return false;
-    if(params.get('public')==='1') return true;
-    const host=(location.hostname||'').toLowerCase();
-    // Any copy published on GitHub Pages is public/read-only by default.
-    if(host.endsWith('.github.io')) return true;
-    return false;
-  }catch(e){return false}
-}
-function lockPublicElement(el){
-  if(!el)return;
-  if('readOnly' in el) el.readOnly=true;
-  if('disabled' in el && !el.matches('#search,.filter-select')) el.disabled=true;
-  el.tabIndex=-1;
-  el.setAttribute('aria-readonly','true');
-}
-function closeAdminOverlays(){
-  ['competitor-modal','history-modal','public-ranking-modal','social-card-modal'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.style.display='none';
-  });
-}
-function applyPublicMode(){
-  if(!isPublicMode())return;
-  document.body.classList.add('public-mode');
-  closeAdminOverlays();
-
-  const title=qs('#titulo-torneio');
-  if(title){
-    title.contentEditable='false';
-    title.setAttribute('aria-readonly','true');
-    title.style.pointerEvents='none';
-  }
-
-  const stripText=document.querySelector('.strip-left span:last-child');
-  if(stripText)stripText.textContent='Ranking Público • Somente leitura';
-  const live=document.querySelector('.live-badge');
-  if(live)live.innerHTML='<span class="live-dot"></span> ranking público';
-
-  qsa('.input-name,.input-peixe,.input-total,.input-maior-peixe').forEach(lockPublicElement);
-  qsa('#num-peixes,#limite,#criterio-desempate').forEach(lockPublicElement);
-
-  // Block admin/edit actions even if a hidden control is triggered programmatically or by stale UI.
-  const blockedSelectors=[
-    '#btn-add','#btn-min-menu','#btn-awards','#btn-history','#btn-export','#btn-print',
-    '#btn-toggle-progress','#btn-giant','#btn-display','#btn-fullscreen','#btn-summary',
-    '.edit-profile','.del-btn','#btn-save-competitor','#btn-remove-photo','#btn-pick-photo'
-  ].join(',');
-
-  document.addEventListener('click',e=>{
-    if(!isPublicMode())return;
-    const blocked=e.target.closest?.(blockedSelectors);
-    if(blocked){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      closeAdminOverlays();
-      return false;
-    }
-  },true);
-
-  document.addEventListener('input',e=>{
-    if(!isPublicMode())return;
-    if(e.target.matches?.('.input-name,.input-peixe,#titulo-torneio')){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    }
-  },true);
-
-  document.addEventListener('keydown',e=>{
-    if(!isPublicMode())return;
-    if(e.target.matches?.('.input-name,.input-peixe,#titulo-torneio')){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      e.target.blur?.();
-    }
-  },true);
-
-  document.addEventListener('focusin',e=>{
-    if(isPublicMode() && e.target.matches?.('.input-name,.input-peixe,#titulo-torneio')) e.target.blur();
-  },true);
-
-  const table=qs('#tabela-corpo');
-  if(table&&!table.dataset.publicObserver){
-    table.dataset.publicObserver='1';
-    new MutationObserver(()=>{
-      qsa('.input-name,.input-peixe,.input-total,.input-maior-peixe',table).forEach(lockPublicElement);
-      closeAdminOverlays();
-    }).observe(table,{childList:true,subtree:true,attributes:true});
-  }
-}
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',()=>{applyPublicMode();setTimeout(applyPublicMode,50)});
-}else{
-  applyPublicMode();
-}
-window.addEventListener('load',()=>{applyPublicMode();setTimeout(applyPublicMode,80);setTimeout(applyPublicMode,300)});
 function bindShareReportFeatures(){
   qs('#btn-final-report')?.addEventListener('click',()=>{closeMinimalMenu();openFinalReport()});
   qs('#btn-public-ranking')?.addEventListener('click',()=>{closeMinimalMenu();openPublicRanking()});
@@ -2251,6 +2143,94 @@ function bindShareReportFeatures(){
   document.querySelectorAll('.social-format-btn').forEach(btn=>btn.addEventListener('click',()=>setSocialFormat(btn.dataset.format)));qs('#btn-download-social')?.addEventListener('click',downloadSocialCard);qs('#btn-native-share')?.addEventListener('click',nativeShareCard);qs('#btn-whatsapp-share')?.addEventListener('click',whatsappShare);qs('#btn-copy-caption')?.addEventListener('click',copySocialCaption);updateSocialFormatUI();updatePublicUrlUI();
 }
 window.addEventListener('load',bindShareReportFeatures);
+
+
+// ===== MODO PÚBLICO SEGURO =====
+function safeIsPublicView(){
+  try{
+    const p=new URLSearchParams(location.search);
+    if(p.get('admin')==='1') return false;
+    if(p.get('public')==='1') return true;
+    return (location.hostname||'').toLowerCase().endsWith('.github.io');
+  }catch(e){return false}
+}
+
+function safeLockPublicFields(){
+  if(!safeIsPublicView()) return;
+  document.querySelectorAll('.input-name,.input-peixe').forEach(el=>{
+    try{
+      el.readOnly=true;
+      el.tabIndex=-1;
+      el.setAttribute('aria-readonly','true');
+    }catch(e){}
+  });
+  const title=document.getElementById('titulo-torneio');
+  if(title){
+    title.contentEditable='false';
+    title.setAttribute('aria-readonly','true');
+  }
+}
+
+function safeApplyPublicView(){
+  if(!safeIsPublicView()) return;
+  document.body.classList.add('public-view');
+
+  // Remove admin-only overlays/buttons from the live DOM.
+  [
+    'minimal-menu-overlay','competitor-modal','history-modal',
+    'public-ranking-modal','social-card-modal'
+  ].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.remove();
+  });
+
+  [
+    'btn-min-menu','btn-add','btn-awards','btn-history','btn-export','btn-print',
+    'btn-toggle-progress','btn-giant','btn-display','btn-fullscreen','btn-summary'
+  ].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.remove();
+  });
+
+  document.querySelectorAll('.config-panel,.edit-profile,.del-btn,.toggle,.save-state,#public-link-chip')
+    .forEach(el=>el.remove());
+
+  const stripText=document.querySelector('.strip-left span:last-child');
+  if(stripText) stripText.textContent='Ranking Público • Somente leitura';
+
+  const live=document.querySelector('.live-badge');
+  if(live) live.innerHTML='<span class="live-dot"></span> ranking público';
+
+  safeLockPublicFields();
+
+  // Re-apply a few times because the ranking rows may be rebuilt shortly after load.
+  [80,250,700,1500].forEach(ms=>setTimeout(safeLockPublicFields,ms));
+
+  // Hard block any remaining edit attempts without observing/mutating the whole DOM.
+  document.addEventListener('click',e=>{
+    if(!safeIsPublicView()) return;
+    const t=e.target.closest?.('.edit-profile,.del-btn,#btn-add,#btn-min-menu');
+    if(t){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  },true);
+
+  document.addEventListener('keydown',e=>{
+    if(!safeIsPublicView()) return;
+    if(e.target.matches?.('.input-name,.input-peixe,#titulo-torneio')){
+      e.preventDefault();
+      e.target.blur?.();
+    }
+  },true);
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',safeApplyPublicView);
+}else{
+  safeApplyPublicView();
+}
+window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 
 </script>
 
