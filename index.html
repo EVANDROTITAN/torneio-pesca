@@ -898,6 +898,54 @@ body.public-view::before{
   body.public-view::before{right:8px;bottom:8px;font-size:.56rem;padding:6px 8px}
 }
 
+
+/* ===== FIREBASE • RANKING AO VIVO ===== */
+#cloud-login-overlay{
+  display:none;position:fixed;inset:0;z-index:10050;
+  background:rgba(2,22,25,.88);backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:18px;
+}
+body.cloud-admin-mode:not(.cloud-authenticated) #cloud-login-overlay{display:flex}
+.cloud-login-card{
+  width:min(94vw,430px);background:var(--panel);border:1px solid var(--border);
+  border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.36);padding:22px;
+}
+.cloud-login-card h2{margin:0 0 6px;font-size:1.15rem}
+.cloud-login-card p{margin:0 0 16px;color:var(--muted);font-size:.84rem;line-height:1.45}
+.cloud-login-card label{display:block;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 0 6px}
+.cloud-login-card input{
+  width:100%;box-sizing:border-box;border:1px solid var(--border);background:var(--input);
+  color:var(--text);border-radius:11px;padding:12px 13px;font:inherit;outline:none;
+}
+.cloud-login-card input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(12,126,137,.12)}
+.cloud-login-actions{display:flex;gap:8px;margin-top:16px}
+.cloud-login-actions .btn{flex:1}
+#cloud-login-error{display:none;margin-top:10px;color:#dc3545;font-size:.78rem;font-weight:800}
+#cloud-toolbar{
+  display:none;position:fixed;right:14px;bottom:14px;z-index:9300;
+  background:rgba(4,45,49,.96);color:#fff;border:1px solid rgba(143,233,223,.25);
+  border-radius:14px;padding:8px;box-shadow:0 15px 38px rgba(0,0,0,.26);
+  align-items:center;gap:7px;flex-wrap:wrap;max-width:min(92vw,680px)
+}
+body.cloud-admin-mode.cloud-authenticated #cloud-toolbar{display:flex}
+.cloud-dot{width:9px;height:9px;border-radius:50%;background:#f0ad4e;display:inline-block}
+.cloud-dot.ok{background:#20c77a}.cloud-dot.err{background:#e55353}.cloud-dot.busy{background:#f0ad4e}
+#cloud-status-text{font-size:.72rem;font-weight:850;white-space:nowrap}
+#cloud-toolbar .btn{padding:7px 9px;font-size:.7rem}
+body.public-view #cloud-toolbar{display:none!important}
+.cloud-live-note{
+  display:none;position:fixed;left:12px;bottom:12px;z-index:80;
+  padding:6px 9px;border-radius:999px;background:rgba(4,45,49,.9);
+  color:#d7fffa;border:1px solid rgba(143,233,223,.22);
+  font-size:.62rem;font-weight:900
+}
+body.public-view.cloud-data-live .cloud-live-note{display:block}
+@media(max-width:760px){
+  #cloud-toolbar{right:8px;bottom:42px;max-width:calc(100vw - 16px)}
+  .cloud-login-card{padding:18px}
+  .cloud-live-note{left:8px;bottom:36px;font-size:.56rem}
+}
+
 </style>
 </head>
 <body>
@@ -1657,7 +1705,32 @@ body.public-view::before{
     const w = window.open('', '_blank');
     if(!w){ alert('Seu navegador bloqueou a impressão. Tente novamente.'); return; }
     const t = (qs('#titulo-torneio').innerText || 'Resumo').trim();
-    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(t)}</title><style>body{font-family:Segoe UI,Arial,sans-serif;padding:22px;color:#163238}.chip{border:1px solid #dbe7e5;border-radius:10px;padding:10px}b{font-weight:800}</style></head><body>${buildSummaryHTML()}</body></html>`);
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(t)}</title><style>body{font-family:Segoe UI,Arial,sans-serif;padding:22px;color:#163238}.chip{border:1px solid #dbe7e5;border-radius:10px;padding:10px}b{font-weight:800}</style></head><body>${buildSummaryHTML()}
+<div id="cloud-login-overlay">
+  <div class="cloud-login-card">
+    <h2>🔐 Administrador do torneio</h2>
+    <p>Entre com o e-mail e a senha cadastrados no Firebase para alterar e publicar o ranking ao vivo.</p>
+    <label for="cloud-email">E-mail</label>
+    <input id="cloud-email" type="email" autocomplete="username" placeholder="seu@email.com">
+    <label for="cloud-password">Senha</label>
+    <input id="cloud-password" type="password" autocomplete="current-password" placeholder="••••••••">
+    <div id="cloud-login-error"></div>
+    <div class="cloud-login-actions">
+      <button class="btn btn-primary" id="cloud-login-btn" type="button">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="cloud-toolbar">
+  <span class="cloud-dot busy" id="cloud-dot"></span>
+  <span id="cloud-status-text">Conectando...</span>
+  <button class="btn btn-secondary" id="cloud-publish-btn" type="button">☁️ Enviar dados atuais</button>
+  <button class="btn btn-secondary" id="cloud-load-btn" type="button">⬇ Carregar da nuvem</button>
+  <button class="btn btn-secondary" id="cloud-logout-btn" type="button">Sair</button>
+</div>
+<div class="cloud-live-note">● RANKING SINCRONIZADO AO VIVO</div>
+
+</body></html>`);
     w.document.close();
     w.focus();
     w.print();
@@ -2231,6 +2304,213 @@ if(document.readyState==='loading'){
   safeApplyPublicView();
 }
 window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
+
+
+/* ===== FIREBASE • SINCRONIZAÇÃO EM TEMPO REAL ===== */
+const FIREBASE_TORNEIO_CONFIG = {"apiKey": "AIzaSyD0K-zOrV7jGxahvlbs6NU6tuxKXt99q0g", "authDomain": "torneio-pesca.firebaseapp.com", "databaseURL": "https://torneio-pesca-default-rtdb.firebaseio.com", "projectId": "torneio-pesca", "storageBucket": "torneio-pesca.firebasestorage.app", "messagingSenderId": "151284029680", "appId": "1:151284029680:web:7230b351e0019769638a35"};
+const CLOUD_RANKING_PATH = 'rankingAtual';
+let cloudSdk=null, cloudDb=null, cloudAuth=null, cloudUser=null, cloudReady=false;
+let cloudApplying=false, cloudWriteTimer=null, cloudRemoteExists=false;
+let cloudOriginalSalvarTudo = (typeof salvarTudo==='function') ? salvarTudo : null;
+
+function cloudAdminMode(){
+  try{ return new URLSearchParams(location.search).get('admin')==='1'; }catch(e){ return false; }
+}
+function cloudPublicMode(){
+  try{
+    const p=new URLSearchParams(location.search);
+    if(p.get('admin')==='1') return false;
+    return p.get('public')==='1' || (location.hostname||'').toLowerCase().endsWith('.github.io');
+  }catch(e){ return false; }
+}
+function cloudSetStatus(msg,state='busy'){
+  const t=document.getElementById('cloud-status-text'), d=document.getElementById('cloud-dot');
+  if(t)t.textContent=msg;
+  if(d){d.classList.remove('ok','err','busy');d.classList.add(state)}
+}
+function cloudFriendlyError(err){
+  const code=err?.code||'';
+  if(code.includes('invalid-credential')||code.includes('wrong-password')||code.includes('user-not-found')) return 'E-mail ou senha inválidos.';
+  if(code.includes('too-many-requests')) return 'Muitas tentativas. Aguarde um pouco e tente novamente.';
+  if(code.includes('unauthorized-domain')) return 'Este domínio ainda não está autorizado no Firebase Authentication.';
+  if(code.includes('network-request-failed')) return 'Falha de internet. Verifique sua conexão.';
+  return err?.message||'Não foi possível concluir esta operação.';
+}
+function cloudGetLocalState(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'null'); }catch(e){ return null; }
+}
+function cloudApplyState(state, updatedAt){
+  if(!state || typeof state!=='object') return;
+  cloudApplying=true;
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+    if(typeof carregarDoStorage==='function') carregarDoStorage();
+    if(typeof safeApplyPublicView==='function') safeApplyPublicView();
+    document.body.classList.add('cloud-data-live');
+    const live=document.querySelector('.live-badge');
+    if(live && cloudPublicMode()) live.innerHTML='<span class="live-dot"></span> ranking ao vivo';
+    if(updatedAt){
+      const last=document.getElementById('last-update');
+      if(last) last.textContent=new Date(updatedAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    }
+  }finally{
+    setTimeout(()=>{cloudApplying=false},0);
+  }
+}
+async function cloudWriteNow(showToast=true){
+  if(!cloudReady || !cloudUser || !cloudDb || !cloudSdk) return false;
+  const state=cloudGetLocalState();
+  if(!state){ if(showToast) alert('Não há dados locais para enviar.'); return false; }
+  try{
+    cloudSetStatus('Enviando para a nuvem...','busy');
+    await cloudSdk.set(cloudSdk.ref(cloudDb,CLOUD_RANKING_PATH),{
+      state,
+      updatedAt:Date.now()
+    });
+    cloudRemoteExists=true;
+    cloudSetStatus('Sincronizado agora','ok');
+    if(showToast && typeof toast==='function') toast('Ranking enviado para a nuvem.');
+    return true;
+  }catch(err){
+    cloudSetStatus('Erro ao salvar','err');
+    if(showToast) alert('Não consegui salvar no Firebase: '+cloudFriendlyError(err));
+    return false;
+  }
+}
+function cloudScheduleWrite(){
+  if(cloudApplying || !cloudReady || !cloudUser || !cloudAdminMode()) return;
+  clearTimeout(cloudWriteTimer);
+  cloudSetStatus('Alterações pendentes...','busy');
+  cloudWriteTimer=setTimeout(()=>cloudWriteNow(false),650);
+}
+async function cloudLoadOnce(showToast=true){
+  if(!cloudReady || !cloudDb || !cloudSdk) return false;
+  try{
+    cloudSetStatus('Carregando da nuvem...','busy');
+    const snap=await cloudSdk.get(cloudSdk.ref(cloudDb,CLOUD_RANKING_PATH));
+    if(!snap.exists()){
+      cloudRemoteExists=false;
+      cloudSetStatus('Nuvem vazia','busy');
+      if(showToast) alert('Ainda não há ranking salvo na nuvem.');
+      return false;
+    }
+    const v=snap.val();
+    cloudRemoteExists=true;
+    cloudApplyState(v?.state||v,v?.updatedAt);
+    cloudSetStatus('Dados carregados','ok');
+    if(showToast && typeof toast==='function') toast('Ranking carregado da nuvem.');
+    return true;
+  }catch(err){
+    cloudSetStatus('Erro ao carregar','err');
+    if(showToast) alert('Não consegui carregar do Firebase: '+cloudFriendlyError(err));
+    return false;
+  }
+}
+function cloudSubscribePublic(){
+  if(!cloudReady || !cloudDb || !cloudSdk) return;
+  cloudSdk.onValue(cloudSdk.ref(cloudDb,CLOUD_RANKING_PATH),snap=>{
+    if(!snap.exists()){
+      document.body.classList.remove('cloud-data-live');
+      const live=document.querySelector('.live-badge');
+      if(live) live.innerHTML='<span class="live-dot"></span> aguardando ranking';
+      return;
+    }
+    const v=snap.val();
+    cloudRemoteExists=true;
+    cloudApplyState(v?.state||v,v?.updatedAt);
+  },err=>{
+    console.error('Firebase onValue:',err);
+    const live=document.querySelector('.live-badge');
+    if(live) live.textContent='falha na sincronização';
+  });
+}
+async function cloudLogin(){
+  const email=(document.getElementById('cloud-email')?.value||'').trim();
+  const password=document.getElementById('cloud-password')?.value||'';
+  const errBox=document.getElementById('cloud-login-error');
+  if(errBox){errBox.style.display='none';errBox.textContent=''}
+  if(!email||!password){
+    if(errBox){errBox.textContent='Informe e-mail e senha.';errBox.style.display='block'}
+    return;
+  }
+  try{
+    cloudSetStatus('Entrando...','busy');
+    await cloudSdk.signInWithEmailAndPassword(cloudAuth,email,password);
+    localStorage.setItem('pescaFirebaseAdminEmail',email);
+  }catch(err){
+    if(errBox){errBox.textContent=cloudFriendlyError(err);errBox.style.display='block'}
+    cloudSetStatus('Login necessário','busy');
+  }
+}
+async function initTorneioFirebase(){
+  try{
+    if(cloudAdminMode()) document.body.classList.add('cloud-admin-mode');
+    const appMod=await import('https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js');
+    const authMod=await import('https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js');
+    const dbMod=await import('https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js');
+    const app=appMod.initializeApp(FIREBASE_TORNEIO_CONFIG);
+    cloudAuth=authMod.getAuth(app);
+    cloudDb=dbMod.getDatabase(app);
+    cloudSdk={
+      signInWithEmailAndPassword:authMod.signInWithEmailAndPassword,
+      signOut:authMod.signOut,
+      onAuthStateChanged:authMod.onAuthStateChanged,
+      ref:dbMod.ref,set:dbMod.set,get:dbMod.get,onValue:dbMod.onValue
+    };
+    cloudReady=true;
+
+    if(cloudPublicMode()){
+      cloudSubscribePublic();
+      return;
+    }
+
+    if(cloudAdminMode()){
+      const savedEmail=localStorage.getItem('pescaFirebaseAdminEmail')||'';
+      const emailInput=document.getElementById('cloud-email');
+      if(emailInput) emailInput.value=savedEmail;
+
+      authMod.onAuthStateChanged(cloudAuth,async user=>{
+        cloudUser=user||null;
+        if(user){
+          document.body.classList.add('cloud-authenticated');
+          cloudSetStatus('Administrador conectado','ok');
+          // Load the cloud version if one already exists. If cloud is empty, keep local data.
+          await cloudLoadOnce(false);
+        }else{
+          document.body.classList.remove('cloud-authenticated');
+          cloudSetStatus('Login necessário','busy');
+        }
+      });
+    }
+  }catch(err){
+    console.error('Falha ao iniciar Firebase:',err);
+    cloudSetStatus('Firebase indisponível','err');
+    const box=document.getElementById('cloud-login-error');
+    if(box && cloudAdminMode()){
+      box.textContent='Não consegui iniciar o Firebase. Verifique a internet e recarregue a página.';
+      box.style.display='block';
+    }
+  }
+}
+
+// Wrap the existing save routine: local save always works; cloud save only for authenticated admin.
+if(cloudOriginalSalvarTudo){
+  salvarTudo=function(){
+    cloudOriginalSalvarTudo();
+    cloudScheduleWrite();
+  };
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('cloud-login-btn')?.addEventListener('click',cloudLogin);
+  document.getElementById('cloud-password')?.addEventListener('keydown',e=>{if(e.key==='Enter')cloudLogin()});
+  document.getElementById('cloud-publish-btn')?.addEventListener('click',()=>cloudWriteNow(true));
+  document.getElementById('cloud-load-btn')?.addEventListener('click',()=>cloudLoadOnce(true));
+  document.getElementById('cloud-logout-btn')?.addEventListener('click',async()=>{
+    try{await cloudSdk?.signOut(cloudAuth)}catch(e){}
+  });
+  initTorneioFirebase();
+});
 
 </script>
 
