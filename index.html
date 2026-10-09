@@ -883,6 +883,17 @@ body.public-mode td:last-child{display:none!important}
 body.public-mode .minimal-filterbar{margin-top:6px}
 body.public-mode .official-podium-wrap{margin-top:10px}
 body.public-mode .championship-strip{position:sticky;top:0;z-index:30}
+
+body.public-mode #competitor-modal,
+body.public-mode #history-modal,
+body.public-mode #public-ranking-modal,
+body.public-mode #social-card-modal{display:none!important}
+body.public-mode [contenteditable="true"]{pointer-events:none!important}
+body.public-mode .input-name,
+body.public-mode .input-peixe,
+body.public-mode .input-total,
+body.public-mode .input-maior-peixe{user-select:none}
+
 body.public-mode::before{content:'MODO PÚBLICO • SOMENTE LEITURA';position:fixed;right:16px;bottom:14px;z-index:50;background:rgba(4,45,49,.92);color:#d7fffa;border:1px solid rgba(143,233,223,.28);padding:8px 11px;border-radius:999px;font-size:.68rem;font-weight:900;letter-spacing:.04em;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 @media(max-width:760px){body.public-mode::before{right:8px;bottom:8px;font-size:.58rem;padding:6px 8px}body.public-mode .controls-right #search{max-width:none}}
 
@@ -2124,18 +2135,93 @@ async function whatsappShare(){await drawSocialCard();const b=await canvasBlob()
 function setSocialFormat(fmt){if(!SOCIAL_FORMATS[fmt])return;currentSocialFormat=fmt;updateSocialFormatUI();drawSocialCard()}
 
 function isPublicMode(){try{return new URLSearchParams(location.search).get('public')==='1'}catch(e){return false}}
+function lockPublicElement(el){
+  if(!el)return;
+  if('readOnly' in el) el.readOnly=true;
+  if('disabled' in el && !el.matches('#search,.filter-select')) el.disabled=true;
+  el.tabIndex=-1;
+  el.setAttribute('aria-readonly','true');
+}
+function closeAdminOverlays(){
+  ['competitor-modal','history-modal','public-ranking-modal','social-card-modal'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display='none';
+  });
+}
 function applyPublicMode(){
   if(!isPublicMode())return;
   document.body.classList.add('public-mode');
-  const title=qs('#titulo-torneio'); if(title){title.contentEditable='false';title.setAttribute('aria-readonly','true')}
-  const stripText=document.querySelector('.strip-left span:last-child'); if(stripText)stripText.textContent='Ranking Público • Somente leitura';
-  const live=document.querySelector('.live-badge'); if(live)live.innerHTML='<span class="live-dot"></span> ranking público';
-  qsa('.input-name,.input-peixe').forEach(el=>{el.readOnly=true;el.tabIndex=-1;el.setAttribute('aria-readonly','true')});
-  qsa('#num-peixes,#limite').forEach(el=>{el.disabled=true;el.tabIndex=-1});
-  document.addEventListener('focusin',e=>{if(e.target.matches?.('.input-name,.input-peixe,#titulo-torneio'))e.target.blur()},true);
-  const table=qs('#tabela-corpo'); if(table&&!table.dataset.publicObserver){table.dataset.publicObserver='1';new MutationObserver(()=>qsa('.input-name,.input-peixe',table).forEach(el=>{el.readOnly=true;el.tabIndex=-1;el.setAttribute('aria-readonly','true')})).observe(table,{childList:true,subtree:true})}
+  closeAdminOverlays();
+
+  const title=qs('#titulo-torneio');
+  if(title){
+    title.contentEditable='false';
+    title.setAttribute('aria-readonly','true');
+    title.style.pointerEvents='none';
+  }
+
+  const stripText=document.querySelector('.strip-left span:last-child');
+  if(stripText)stripText.textContent='Ranking Público • Somente leitura';
+  const live=document.querySelector('.live-badge');
+  if(live)live.innerHTML='<span class="live-dot"></span> ranking público';
+
+  qsa('.input-name,.input-peixe,.input-total,.input-maior-peixe').forEach(lockPublicElement);
+  qsa('#num-peixes,#limite,#criterio-desempate').forEach(lockPublicElement);
+
+  // Block admin/edit actions even if a hidden control is triggered programmatically or by stale UI.
+  const blockedSelectors=[
+    '#btn-add','#btn-min-menu','#btn-awards','#btn-history','#btn-export','#btn-print',
+    '#btn-toggle-progress','#btn-giant','#btn-display','#btn-fullscreen','#btn-summary',
+    '.edit-profile','.del-btn','#btn-save-competitor','#btn-remove-photo','#btn-pick-photo'
+  ].join(',');
+
+  document.addEventListener('click',e=>{
+    if(!isPublicMode())return;
+    const blocked=e.target.closest?.(blockedSelectors);
+    if(blocked){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      closeAdminOverlays();
+      return false;
+    }
+  },true);
+
+  document.addEventListener('input',e=>{
+    if(!isPublicMode())return;
+    if(e.target.matches?.('.input-name,.input-peixe,#titulo-torneio')){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  },true);
+
+  document.addEventListener('keydown',e=>{
+    if(!isPublicMode())return;
+    if(e.target.matches?.('.input-name,.input-peixe,#titulo-torneio')){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.target.blur?.();
+    }
+  },true);
+
+  document.addEventListener('focusin',e=>{
+    if(isPublicMode() && e.target.matches?.('.input-name,.input-peixe,#titulo-torneio')) e.target.blur();
+  },true);
+
+  const table=qs('#tabela-corpo');
+  if(table&&!table.dataset.publicObserver){
+    table.dataset.publicObserver='1';
+    new MutationObserver(()=>{
+      qsa('.input-name,.input-peixe,.input-total,.input-maior-peixe',table).forEach(lockPublicElement);
+      closeAdminOverlays();
+    }).observe(table,{childList:true,subtree:true,attributes:true});
+  }
 }
-window.addEventListener('load',()=>{applyPublicMode();setTimeout(applyPublicMode,80)});
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',()=>{applyPublicMode();setTimeout(applyPublicMode,50)});
+}else{
+  applyPublicMode();
+}
+window.addEventListener('load',()=>{applyPublicMode();setTimeout(applyPublicMode,80);setTimeout(applyPublicMode,300)});
 function bindShareReportFeatures(){
   qs('#btn-final-report')?.addEventListener('click',()=>{closeMinimalMenu();openFinalReport()});
   qs('#btn-public-ranking')?.addEventListener('click',()=>{closeMinimalMenu();openPublicRanking()});
