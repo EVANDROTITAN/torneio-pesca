@@ -2134,7 +2134,17 @@ async function copySocialCaption(){const caption=socialCaption();try{await navig
 async function whatsappShare(){await drawSocialCard();const b=await canvasBlob();if(!b)return;const fmt=getSocialFormat();const caption=socialCaption();const f=new File([b],safeFileName((qs('#titulo-torneio')?.innerText||'torneio')+'_top3_'+fmt.file)+'.png',{type:'image/png'});try{if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[f]}))){await navigator.share({title:(qs('#titulo-torneio')?.innerText||'Resultado').trim(),text:caption,files:[f]});return}}catch(e){if(e.name==='AbortError')return}try{await navigator.clipboard.writeText(caption);toast('Legenda copiada e imagem baixada. No WhatsApp Web, anexe a imagem baixada e cole a legenda.')}catch(e){toast('Imagem baixada. No WhatsApp Web, anexe a imagem e escreva a legenda.')}await downloadSocialCard();window.open('https://wa.me/?text='+encodeURIComponent(caption),'_blank')}
 function setSocialFormat(fmt){if(!SOCIAL_FORMATS[fmt])return;currentSocialFormat=fmt;updateSocialFormatUI();drawSocialCard()}
 
-function isPublicMode(){try{return new URLSearchParams(location.search).get('public')==='1'}catch(e){return false}}
+function isPublicMode(){
+  try{
+    const params=new URLSearchParams(location.search);
+    if(params.get('admin')==='1') return false;
+    if(params.get('public')==='1') return true;
+    const host=(location.hostname||'').toLowerCase();
+    // Any copy published on GitHub Pages is public/read-only by default.
+    if(host.endsWith('.github.io')) return true;
+    return false;
+  }catch(e){return false}
+}
 function lockPublicElement(el){
   if(!el)return;
   if('readOnly' in el) el.readOnly=true;
