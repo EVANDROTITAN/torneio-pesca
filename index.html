@@ -1333,6 +1333,86 @@ body.firebase-admin-authenticated #firebase-admin-menu-btn{
   }
 }
 
+
+/* ===== v8.8 • ROLAGEM HORIZONTAL MOBILE RESTAURADA ===== */
+.public-table-card{overflow:visible !important;}
+.public-table-scroll{
+  width:100% !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  touch-action:pan-x pan-y !important;
+  scrollbar-width:thin;
+}
+.public-ranking-table,
+.public-ranking-table.fit-mobile,
+.public-ranking-table.scroll-mobile{
+  table-layout:auto !important;
+  width:max-content !important;
+  min-width:100% !important;
+}
+.public-ranking-table th,
+.public-ranking-table td,
+.public-ranking-table.fit-mobile th,
+.public-ranking-table.fit-mobile td{
+  white-space:nowrap !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+.public-ranking-table .public-participant,
+.public-ranking-table.fit-mobile .public-participant{
+  min-width:185px !important;
+}
+.public-ranking-table .public-avatar,
+.public-ranking-table.fit-mobile .public-avatar{
+  width:34px !important;
+  height:34px !important;
+}
+.public-ranking-table .public-name,
+.public-ranking-table.fit-mobile .public-name{
+  font-size:.72rem !important;
+}
+.public-ranking-table .public-sub,
+.public-ranking-table .public-format-tag,
+.public-ranking-table.fit-mobile .public-sub,
+.public-ranking-table.fit-mobile .public-format-tag{
+  display:block !important;
+}
+.public-ranking-table .public-fish-chip,
+.public-ranking-table.fit-mobile .public-fish-chip{
+  min-width:48px !important;
+  padding:5px 7px !important;
+  font-size:.7rem !important;
+}
+.public-scroll-hint{
+  display:none;
+  margin:7px 12px 0;
+  color:#6b8083;
+  font-size:.66rem;
+  font-weight:850;
+  text-align:right;
+}
+body.public-dark .public-scroll-hint{color:#a9c3c5;}
+@media(max-width:700px){
+  .public-table-card{overflow:hidden !important;}
+  .public-table-scroll{overflow-x:auto !important;}
+  .public-ranking-table,
+  .public-ranking-table.fit-mobile,
+  .public-ranking-table.scroll-mobile{
+    width:max-content !important;
+    min-width:760px !important;
+    table-layout:auto !important;
+  }
+  .public-ranking-table th,
+  .public-ranking-table td,
+  .public-ranking-table.fit-mobile th,
+  .public-ranking-table.fit-mobile td{
+    padding:8px 9px !important;
+    font-size:.68rem !important;
+  }
+  .public-scroll-hint{display:block;}
+}
+
 </style>
 </head>
 <body>
@@ -3037,6 +3117,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
           <div class="public-count" id="public-cloud-count-pill">0 competidores</div>
         </div>
       </div>
+      <div class="public-scroll-hint">← deslize a tabela para ver todas as medidas →</div>
       <div class="public-table-scroll">
         <table class="public-ranking-table">
           <thead>
@@ -3148,22 +3229,14 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       for(let i=1;i<=qtd;i++) html+=`<th class="num">P${i}</th>`;
       head.innerHTML=html;
     }
-
     const table=document.querySelector('.public-ranking-table');
     if(table){
       table.classList.remove('fit-mobile','scroll-mobile');
-
-      if(qtd<=5){
-        table.classList.add('fit-mobile');
-        table.style.minWidth='0px';
-        table.style.width='100%';
-      }else{
-        table.classList.add('scroll-mobile');
-        const base=470;
-        const perFish=72;
-        table.style.minWidth=(base+(qtd*perFish))+'px';
-        table.style.width='100%';
-      }
+      table.classList.add('scroll-mobile');
+      // Largura suficiente para que nenhuma coluna desapareça; no celular usa rolagem horizontal.
+      const minWidth=470+(qtd*82);
+      table.style.minWidth=minWidth+'px';
+      table.style.width='max-content';
     }
   }
 
