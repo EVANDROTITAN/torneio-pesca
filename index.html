@@ -1413,6 +1413,50 @@ body.public-dark .public-scroll-hint{color:#a9c3c5;}
   .public-scroll-hint{display:block;}
 }
 
+
+/* ===== v9.0 • COLUNAS COM LARGURA REAL ===== */
+.public-ranking-table{
+  width:max-content !important;
+  min-width:max-content !important;
+  table-layout:auto !important;
+}
+.public-ranking-table th,
+.public-ranking-table td{
+  box-sizing:border-box !important;
+}
+.public-ranking-table th:nth-child(1),
+.public-ranking-table td:nth-child(1){min-width:54px !important;width:54px !important;}
+.public-ranking-table th:nth-child(2),
+.public-ranking-table td:nth-child(2){min-width:230px !important;width:230px !important;}
+.public-ranking-table th:nth-child(3),
+.public-ranking-table td:nth-child(3){min-width:92px !important;width:92px !important;}
+.public-ranking-table th:nth-child(4),
+.public-ranking-table td:nth-child(4){min-width:92px !important;width:92px !important;}
+.public-ranking-table th:nth-child(n+5),
+.public-ranking-table td:nth-child(n+5){min-width:86px !important;width:86px !important;}
+@media(max-width:700px){
+  .public-table-scroll{
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    touch-action:pan-x !important;
+  }
+  .public-ranking-table{
+    width:max-content !important;
+    min-width:max-content !important;
+  }
+  .public-ranking-table th:nth-child(1),
+  .public-ranking-table td:nth-child(1){min-width:48px !important;width:48px !important;}
+  .public-ranking-table th:nth-child(2),
+  .public-ranking-table td:nth-child(2){min-width:190px !important;width:190px !important;}
+  .public-ranking-table th:nth-child(3),
+  .public-ranking-table td:nth-child(3),
+  .public-ranking-table th:nth-child(4),
+  .public-ranking-table td:nth-child(4){min-width:82px !important;width:82px !important;}
+  .public-ranking-table th:nth-child(n+5),
+  .public-ranking-table td:nth-child(n+5){min-width:78px !important;width:78px !important;}
+}
+
 </style>
 </head>
 <body>
@@ -3118,7 +3162,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
           <div class="public-count" id="public-cloud-count-pill">0 competidores</div>
         </div>
       </div>
-      <div class="public-scroll-hint">← deslize a tabela para ver todas as medidas →</div>
+      <div class="public-scroll-hint">← deslize a tabela para ver todas as medidas → <span id="public-fish-column-hint"></span></div>
       <div class="public-table-scroll">
         <table class="public-ranking-table">
           <thead>
@@ -3238,14 +3282,23 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       for(let i=1;i<=qtd;i++) html+=`<th class="num">P${i}</th>`;
       head.innerHTML=html;
     }
+
     const table=document.querySelector('.public-ranking-table');
     if(table){
-      table.classList.remove('fit-mobile','scroll-mobile');
+      table.classList.remove('fit-mobile');
       table.classList.add('scroll-mobile');
-      // Largura suficiente para que nenhuma coluna desapareça; no celular usa rolagem horizontal.
-      const minWidth=500+(qtd*92);
-      table.style.minWidth=minWidth+'px';
-      table.style.width=minWidth+'px';
+      // Não fixa largura total: cada coluna tem sua própria largura mínima.
+      // Assim a última coluna sempre entra no scrollWidth real da tabela.
+      table.style.removeProperty('width');
+      table.style.removeProperty('min-width');
+      table.style.width='max-content';
+      table.style.minWidth='max-content';
+    }
+
+    const scroller=document.querySelector('.public-table-scroll');
+    if(scroller){
+      // Quando a estrutura muda, volta ao começo para evitar parecer que faltam colunas.
+      scroller.scrollLeft=0;
     }
   }
 
@@ -3264,6 +3317,8 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     document.getElementById('public-cloud-record').textContent=record.toFixed(1).replace('.',',')+' cm';
     const fishCountEl=document.getElementById('public-cloud-fish-count');
     if(fishCountEl) fishCountEl.textContent=qtdPeixes;
+    const colHint=document.getElementById('public-fish-column-hint');
+    if(colHint) colHint.textContent=`• P1 a P${qtdPeixes}`;
     document.getElementById('public-cloud-count-pill').textContent=`${comps.length} competidor${comps.length===1?'':'es'}`;
     document.getElementById('public-live-label').textContent='RANKING AO VIVO';
 
