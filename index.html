@@ -3094,6 +3094,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       <div class="public-cloud-pill">👥 <span id="public-cloud-count">0</span> participantes</div>
       <div class="public-cloud-pill">🐟 <span id="public-cloud-captures">0</span> capturas</div>
       <div class="public-cloud-pill">📏 Recorde <span id="public-cloud-record">0,0 cm</span></div>
+      <div class="public-cloud-pill">🎯 <span id="public-cloud-fish-count">0</span> peixes válidos</div>
     </div>
 
     <div id="public-cloud-error" class="public-error"></div>
@@ -3217,9 +3218,17 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 
   function fishCountFromState(st,comps){
     const explicit=parseInt(st?.qtd,10);
-    if(Number.isFinite(explicit) && explicit>0) return Math.min(20,Math.max(1,explicit));
     const inferred=Math.max(0,...(comps||[]).map(c=>Array.isArray(c.peixes)?c.peixes.length:0));
-    return inferred || 5;
+
+    // Usa sempre a maior evidência disponível.
+    // Isso evita o caso em que a configuração chega 1 posição abaixo,
+    // mas os competidores já possuem todas as medidas.
+    const count=Math.max(
+      Number.isFinite(explicit) && explicit>0 ? explicit : 0,
+      inferred
+    );
+
+    return Math.min(20,Math.max(1,count || 5));
   }
 
   function rebuildPublicFishColumns(qtd){
@@ -3234,9 +3243,9 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       table.classList.remove('fit-mobile','scroll-mobile');
       table.classList.add('scroll-mobile');
       // Largura suficiente para que nenhuma coluna desapareça; no celular usa rolagem horizontal.
-      const minWidth=470+(qtd*82);
+      const minWidth=500+(qtd*92);
       table.style.minWidth=minWidth+'px';
-      table.style.width='max-content';
+      table.style.width=minWidth+'px';
     }
   }
 
@@ -3253,6 +3262,8 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     document.getElementById('public-cloud-count').textContent=comps.length;
     document.getElementById('public-cloud-captures').textContent=captures;
     document.getElementById('public-cloud-record').textContent=record.toFixed(1).replace('.',',')+' cm';
+    const fishCountEl=document.getElementById('public-cloud-fish-count');
+    if(fishCountEl) fishCountEl.textContent=qtdPeixes;
     document.getElementById('public-cloud-count-pill').textContent=`${comps.length} competidor${comps.length===1?'':'es'}`;
     document.getElementById('public-live-label').textContent='RANKING AO VIVO';
 
