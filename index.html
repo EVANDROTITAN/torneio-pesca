@@ -2708,9 +2708,27 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
   function scheduleSend(){
     if(applying||!ready||!user||!isAdmin())return;
     clearTimeout(timer);
-    setCloudStatus('Alterações pendentes...');
-    timer=setTimeout(()=>sendNow(false),700);
+    setCloudStatus('Alteração detectada • sincronizando...');
+    timer=setTimeout(()=>sendNow(false),500);
   }
+
+  // v8.5: qualquer gravação do estado principal no localStorage dispara sincronização.
+  // Isso cobre medidas, título, quantidade de peixes, limite e demais configurações
+  // mesmo quando elas não passam diretamente pela função salvarTudo().
+  (function installCloudStorageWatcher(){
+    if(window.__torneioCloudStorageWatcherInstalled) return;
+    window.__torneioCloudStorageWatcherInstalled = true;
+
+    const originalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function(k,v){
+      originalSetItem.call(this,k,v);
+      try{
+        if(this===localStorage && k===storageKey() && !applying){
+          scheduleSend();
+        }
+      }catch(e){}
+    };
+  })();
   async function loadCloud(showMessage=true){
     if(!ready)return false;
     try{
@@ -2812,7 +2830,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
             document.body.classList.add('firebase-admin-authenticated');
             ensureAdminControls();
             setGate(false);
-            setCloudStatus('Administrador conectado','ok');
+            setCloudStatus('Administrador conectado • autosync ativo','ok');
             await loadCloud(false);
             ensureAdminControls();
           }else{
@@ -2839,11 +2857,23 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       ensureAdminControls();
     }
 
+    // Garantia extra para configurações que alteram a estrutura do torneio.
+    ['num-peixes','limite','titulo-torneio'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.addEventListener('change',()=>setTimeout(scheduleSend,50));
+      el.addEventListener('blur',()=>setTimeout(scheduleSend,50));
+      if(id==='titulo-torneio') el.addEventListener('input',()=>setTimeout(scheduleSend,250));
+    });
+
     document.getElementById('firebase-login-btn')?.addEventListener('click',doLogin);
     document.getElementById('firebase-admin-password')?.addEventListener('keydown',e=>{
       if(e.key==='Enter')doLogin();
     });
-    document.getElementById('firebase-send-btn')?.addEventListener('click',()=>sendNow(true));
+    document.getElementById('firebase-send-btn')?.addEventListener('click',async()=>{
+      setCloudStatus('Enviando dados atuais...');
+      await sendNow(true);
+    });
     document.getElementById('firebase-load-btn')?.addEventListener('click',()=>loadCloud(true));
     document.getElementById('firebase-admin-menu-btn')?.addEventListener('click',()=>{
       ensureAdminControls();
