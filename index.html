@@ -1089,6 +1089,66 @@ body.public-standalone #public-cloud-view{display:block}
   .public-cloud-brand,.public-cloud-live{font-size:.62rem}
 }
 
+
+/* ===== EXPERIÊNCIA PÚBLICA PREMIUM v8.1 ===== */
+.public-cloud-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.public-action-btn{
+  appearance:none;border:1px solid #d4e2e1;background:#fff;color:#0a5964;
+  border-radius:999px;padding:7px 10px;font-size:.7rem;font-weight:900;cursor:pointer
+}
+.public-action-btn:active{transform:translateY(1px)}
+#public-qr-modal{
+  display:none;position:fixed;inset:0;z-index:300000;background:rgba(0,20,24,.72);
+  align-items:center;justify-content:center;padding:18px
+}
+#public-qr-modal.open{display:flex}
+.public-qr-card{
+  background:#fff;border-radius:18px;padding:18px;width:min(92vw,360px);
+  box-shadow:0 24px 80px rgba(0,0,0,.35);text-align:center;color:#15383d
+}
+.public-qr-card h3{margin:0 0 6px}
+.public-qr-card p{margin:0 0 12px;color:#6c8082;font-size:.75rem}
+.public-qr-img{width:220px;height:220px;object-fit:contain;border-radius:12px;border:1px solid #dde8e7;background:#fff}
+.public-qr-close{margin-top:12px}
+.public-table-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.public-ranking-table th.num,
+.public-ranking-table td.num{text-align:center}
+.public-fish-chip{
+  display:inline-flex;min-width:48px;justify-content:center;
+  padding:5px 7px;border-radius:9px;background:#f4f8f8;border:1px solid #dfe9e8;font-weight:850
+}
+.public-format-tag{
+  display:inline-block;margin-top:4px;padding:2px 6px;border-radius:999px;
+  font-size:.58rem;font-weight:900;text-transform:uppercase;background:#fff2df;color:#a66312;border:1px solid #f1d3a7
+}
+.public-telao-badge{display:none}
+body.public-telao .public-cloud-shell{width:min(1500px,98vw)}
+body.public-telao .public-cloud-top{padding:16px 20px}
+body.public-telao .public-cloud-title{font-size:2.15rem}
+body.public-telao .public-cloud-metrics{gap:12px}
+body.public-telao .public-cloud-pill{font-size:.95rem;padding:9px 13px}
+body.public-telao .public-podium-card{min-height:300px}
+body.public-telao .public-podium-card.first{min-height:340px}
+body.public-telao .public-podium-photo{width:118px;height:118px}
+body.public-telao .public-podium-name{font-size:1.25rem}
+body.public-telao .public-podium-total{font-size:1.8rem}
+body.public-telao .public-ranking-table td{font-size:.95rem;padding:13px}
+body.public-telao .public-ranking-table th{font-size:.74rem;padding:11px}
+body.public-telao .public-avatar{width:48px;height:48px}
+body.public-telao .public-telao-badge{display:inline-flex}
+@media(max-width:700px){
+  .public-cloud-top{align-items:flex-start}
+  .public-cloud-actions{justify-content:flex-end}
+  .public-action-btn{font-size:.62rem;padding:6px 8px}
+  .public-podium-card{min-height:210px}
+  .public-podium-card.first{min-height:232px}
+  .public-podium-photo{width:72px;height:72px}
+  .public-podium-name{font-size:.82rem}
+  .public-podium-people{font-size:.58rem}
+  .public-podium-total{font-size:1.12rem}
+  .public-podium-major{font-size:.58rem}
+}
+
 </style>
 </head>
 <body>
@@ -2693,8 +2753,16 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 <div id="public-cloud-view">
   <div class="public-cloud-shell">
     <div class="public-cloud-top">
-      <div class="public-cloud-brand">PLUS • PLACAR OFICIAL</div>
-      <div class="public-cloud-live"><span class="public-cloud-live-dot"></span><span id="public-live-label">CONECTANDO...</span></div>
+      <div>
+        <div class="public-cloud-brand">PLUS • PLACAR OFICIAL</div>
+        <div class="public-cloud-live"><span class="public-cloud-live-dot"></span><span id="public-live-label">CONECTANDO...</span></div>
+      </div>
+      <div class="public-cloud-actions">
+        <span class="public-count public-telao-badge">📺 MODO TELÃO</span>
+        <button class="public-action-btn" id="public-share-btn" type="button">↗ Compartilhar</button>
+        <button class="public-action-btn" id="public-qr-btn" type="button">▦ QR Code</button>
+        <button class="public-action-btn" id="public-telao-btn" type="button">📺 Telão</button>
+      </div>
     </div>
 
     <div class="public-cloud-title" id="public-cloud-title">🏆 Torneio de Pesca</div>
@@ -2715,23 +2783,35 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 
     <div class="public-table-card">
       <div class="public-table-head">
-        <div>
-          <div class="public-section-kicker">Classificação geral</div>
-          <div class="public-updated" id="public-cloud-updated">Aguardando atualização...</div>
+        <div class="public-table-meta">
+          <div>
+            <div class="public-section-kicker">Classificação geral</div>
+            <div class="public-updated" id="public-cloud-updated">Aguardando atualização...</div>
+          </div>
+          <div class="public-count" id="public-cloud-count-pill">0 competidores</div>
         </div>
-        <div class="public-count" id="public-cloud-count-pill">0 competidores</div>
       </div>
       <div class="public-table-scroll">
         <table class="public-ranking-table">
           <thead>
             <tr>
-              <th>Pos</th><th>Participação</th><th>Total</th><th>Maior peixe</th><th>Capturas</th>
+              <th>Pos</th><th>Participação</th><th class="num">Total</th><th class="num">Maior</th>
+              <th class="num">P1</th><th class="num">P2</th><th class="num">P3</th><th class="num">P4</th><th class="num">P5</th>
             </tr>
           </thead>
           <tbody id="public-cloud-body"></tbody>
         </table>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="public-qr-modal">
+  <div class="public-qr-card">
+    <h3>QR Code do ranking</h3>
+    <p>Aponte a câmera para acompanhar a classificação ao vivo.</p>
+    <img id="public-qr-img" class="public-qr-img" alt="QR Code do ranking">
+    <div><button class="public-action-btn public-qr-close" id="public-qr-close" type="button">Fechar</button></div>
   </div>
 </div>
 
@@ -2762,15 +2842,34 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#0b6f79"/><stop offset="1" stop-color="#f4a340"/></linearGradient></defs><rect width="120" height="120" rx="60" fill="url(#g)"/><text x="60" y="70" text-anchor="middle" font-family="Arial" font-size="38" font-weight="700" fill="white">${esc(initials(name))}</text></svg>`;
     return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
   }
+  function formatMode(c){
+    return String(c.modalidade||c.formato||'solo').toLowerCase();
+  }
   function titleOf(c){
-    const m=(c.modalidade||'solo').toLowerCase();
-    return (m==='dupla'||m==='equipe') ? (c.grupo||c.nome||'Participação') : (c.nome||'Participante');
+    const m=formatMode(c);
+    if(m==='dupla'||m==='equipe'){
+      return c.grupo||c.nomeEquipe||c.nomeDupla||c.nomeGrupo||c.nome||'Participação';
+    }
+    return c.nome||'Participante';
   }
   function peopleOf(c){
-    const m=(c.modalidade||'solo').toLowerCase();
+    const m=formatMode(c);
     if(m==='solo') return '';
-    const arr=[c.nome,c.membros].filter(Boolean);
-    return arr.join(' • ');
+    const raw=[
+      c.participantes,
+      c.membros,
+      c.parceiro,
+      c.parceira,
+      c.nomeParceiro,
+      c.nomeParceira
+    ].filter(Boolean);
+    let people=[];
+    raw.forEach(v=>{
+      if(Array.isArray(v)) people.push(...v);
+      else people.push(...String(v).split(/\s*[•;,|]\s*/).filter(Boolean));
+    });
+    if(c.nome && c.nome!==titleOf(c)) people.unshift(c.nome);
+    return [...new Set(people.map(x=>String(x).trim()).filter(Boolean))].join(' • ');
   }
   function normalizeCompetitors(raw){
     const arr=Array.isArray(raw)?raw:Object.keys(raw||{}).sort((a,b)=>Number(a)-Number(b)).map(k=>raw[k]);
@@ -2779,6 +2878,10 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       const vals=(fish||[]).map(num);
       return {...c,peixes:vals,total:vals.reduce((a,b)=>a+b,0),maior:Math.max(0,...vals),capturas:vals.filter(x=>x>0).length};
     });
+  }
+  function fishText(c,i){
+    const v=Number(c.peixes?.[i]||0);
+    return v>0 ? v.toFixed(1).replace('.',',') : '—';
   }
   function compare(a,b,tie='maior'){
     if(b.total!==a.total) return b.total-a.total;
@@ -2819,6 +2922,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
         <img class="public-podium-photo" src="${esc(photo)}" alt="">
         <div class="public-podium-name">${esc(title)}</div>
         ${people?`<div class="public-podium-people">${esc(people)}</div>`:''}
+        <div class="public-format-tag">${esc(formatMode(c))}</div>
         <div class="public-podium-total">${c.total.toFixed(1).replace('.',',')} cm</div>
         <div class="public-podium-major">Maior peixe: ${c.maior.toFixed(1).replace('.',',')} cm</div>
       </div>`;
@@ -2833,10 +2937,23 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
         const title=titleOf(c),people=peopleOf(c),photo=c.foto||fallbackAvatar(title);
         return `<tr>
           <td class="public-rank-num">${i+1}º</td>
-          <td><div class="public-participant"><img class="public-avatar" src="${esc(photo)}" alt=""><div><div class="public-name">${esc(title)}</div><div class="public-sub">${esc(people||c.categoria||c.modalidade||'')}</div></div></div></td>
-          <td class="public-number">${c.total.toFixed(1).replace('.',',')} cm</td>
-          <td>${c.maior.toFixed(1).replace('.',',')} cm</td>
-          <td>${c.capturas}</td>
+          <td>
+            <div class="public-participant">
+              <img class="public-avatar" src="${esc(photo)}" alt="">
+              <div>
+                <div class="public-name">${esc(title)}</div>
+                <div class="public-sub">${esc(people||c.categoria||'')}</div>
+                <div class="public-format-tag">${esc(formatMode(c))}</div>
+              </div>
+            </div>
+          </td>
+          <td class="public-number num">${c.total.toFixed(1).replace('.',',')} cm</td>
+          <td class="num">${c.maior.toFixed(1).replace('.',',')} cm</td>
+          <td class="num"><span class="public-fish-chip">${fishText(c,0)}</span></td>
+          <td class="num"><span class="public-fish-chip">${fishText(c,1)}</span></td>
+          <td class="num"><span class="public-fish-chip">${fishText(c,2)}</span></td>
+          <td class="num"><span class="public-fish-chip">${fishText(c,3)}</span></td>
+          <td class="num"><span class="public-fish-chip">${fishText(c,4)}</span></td>
         </tr>`;
       }).join('');
     }
@@ -2863,9 +2980,50 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       document.getElementById('public-live-label').textContent='RECONECTANDO';
     }
   }
+
+  function canonicalPublicUrl(){
+    return location.origin+location.pathname+'?public=1';
+  }
+  async function sharePublic(){
+    const url=canonicalPublicUrl();
+    const title=document.getElementById('public-cloud-title')?.textContent||'Ranking ao vivo';
+    try{
+      if(navigator.share){
+        await navigator.share({title,text:'Acompanhe a classificação ao vivo:',url});
+      }else{
+        await navigator.clipboard.writeText(url);
+        alert('Link do ranking copiado.');
+      }
+    }catch(e){}
+  }
+  function openQr(){
+    const url=canonicalPublicUrl();
+    const img=document.getElementById('public-qr-img');
+    if(img){
+      img.src='https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=12&data='+encodeURIComponent(url);
+    }
+    document.getElementById('public-qr-modal')?.classList.add('open');
+  }
+  function toggleTelao(){
+    const u=new URL(location.href);
+    if(u.searchParams.get('telao')==='1')u.searchParams.delete('telao');
+    else u.searchParams.set('telao','1');
+    location.href=u.toString();
+  }
+
   function boot(){
     if(!isPublic()) return;
     document.body.classList.add('public-standalone');
+    try{
+      if(new URLSearchParams(location.search).get('telao')==='1') document.body.classList.add('public-telao');
+    }catch(e){}
+    document.getElementById('public-share-btn')?.addEventListener('click',sharePublic);
+    document.getElementById('public-qr-btn')?.addEventListener('click',openQr);
+    document.getElementById('public-qr-close')?.addEventListener('click',()=>document.getElementById('public-qr-modal')?.classList.remove('open'));
+    document.getElementById('public-qr-modal')?.addEventListener('click',e=>{
+      if(e.target?.id==='public-qr-modal')e.currentTarget.classList.remove('open');
+    });
+    document.getElementById('public-telao-btn')?.addEventListener('click',toggleTelao);
     load();
     setInterval(load,2500);
   }
