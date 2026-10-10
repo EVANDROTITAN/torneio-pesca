@@ -2622,5 +2622,105 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 })();
 </script>
 
+
+<script>
+/* ===== LEITURA PÚBLICA COMPATÍVEL v7.6 ===== */
+(function(){
+  const PUBLIC_DB_URL='https://torneio-pesca-default-rtdb.firebaseio.com/rankingAtual.json';
+  let lastRemoteStamp=0;
+  let publicPollBusy=false;
+
+  function publicModeNow(){
+    try{
+      const p=new URLSearchParams(location.search);
+      if(p.get('admin')==='1') return false;
+      return p.get('public')==='1' || (location.hostname||'').toLowerCase().endsWith('.github.io');
+    }catch(e){ return false; }
+  }
+
+  function publicStorageKey(){
+    try{
+      return typeof STORAGE_KEY!=='undefined' ? STORAGE_KEY : 'pescaUltra2025_tablet';
+    }catch(e){
+      return 'pescaUltra2025_tablet';
+    }
+  }
+
+  function markPublicStatus(text){
+    const live=document.querySelector('.live-badge');
+    if(live) live.innerHTML='<span class="live-dot"></span> '+text;
+  }
+
+  function applyPublicCloudData(payload){
+    if(!payload) return;
+    const state=payload.state || payload;
+    const stamp=Number(payload.updatedAt||0);
+
+    if(!state || typeof state!=='object') return;
+    if(stamp && stamp===lastRemoteStamp) return;
+
+    try{
+      localStorage.setItem(publicStorageKey(), JSON.stringify(state));
+      if(typeof carregarDoStorage==='function'){
+        carregarDoStorage();
+      }
+      if(typeof safeApplyPublicView==='function'){
+        safeApplyPublicView();
+      }
+      document.body.classList.add('firebase-live-connected');
+      markPublicStatus('ranking ao vivo');
+      lastRemoteStamp=stamp || Date.now();
+
+      const el=document.getElementById('last-update');
+      if(el && stamp){
+        el.textContent=new Date(stamp).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      }
+    }catch(err){
+      console.error('Falha ao aplicar ranking público:',err);
+    }
+  }
+
+  async function pollPublicRanking(){
+    if(!publicModeNow() || publicPollBusy) return;
+    publicPollBusy=true;
+    try{
+      const url=PUBLIC_DB_URL+'?t='+Date.now();
+      const res=await fetch(url,{
+        method:'GET',
+        cache:'no-store',
+        headers:{'Accept':'application/json'}
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data=await res.json();
+
+      if(data){
+        applyPublicCloudData(data);
+      }else{
+        markPublicStatus('aguardando dados');
+      }
+    }catch(err){
+      console.error('Leitura pública Firebase:',err);
+      markPublicStatus('offline • tentando novamente');
+    }finally{
+      publicPollBusy=false;
+    }
+  }
+
+  function startPublicFallback(){
+    if(!publicModeNow()) return;
+    markPublicStatus('conectando ao ranking...');
+    pollPublicRanking();
+    setTimeout(pollPublicRanking,700);
+    setInterval(pollPublicRanking,2500);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',startPublicFallback);
+  }else{
+    startPublicFallback();
+  }
+})();
+</script>
+
 </body>
 </html>
