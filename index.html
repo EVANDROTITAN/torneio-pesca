@@ -1477,6 +1477,69 @@ body.public-dark .public-scroll-hint{color:#a9c3c5;}
   }
 }
 
+
+/* ===== v9.2 • CORREÇÃO DEFINITIVA DO HOVER/LINHAS NO TEMA ESCURO ===== */
+
+/* Zebra do modo escuro */
+body.public-dark .public-ranking-table tbody tr:nth-child(odd) > td{
+  background:#0d262a !important;
+  color:#e8f5f4 !important;
+}
+body.public-dark .public-ranking-table tbody tr:nth-child(even) > td{
+  background:#102c31 !important;
+  color:#e8f5f4 !important;
+}
+
+/* Hover/foco/clique: nunca deixar a linha branca */
+body.public-dark .public-ranking-table tbody tr:hover > td,
+body.public-dark .public-ranking-table tbody tr:focus > td,
+body.public-dark .public-ranking-table tbody tr:focus-within > td,
+body.public-dark .public-ranking-table tbody tr:active > td,
+body.public-dark .public-ranking-table tbody tr.selected > td,
+body.public-dark .public-ranking-table tbody tr.active > td{
+  background:#16363b !important;
+  color:#ffffff !important;
+}
+
+/* Se alguma regra antiga aplicar fundo diretamente na linha */
+body.public-dark .public-ranking-table tbody tr:hover,
+body.public-dark .public-ranking-table tbody tr:focus,
+body.public-dark .public-ranking-table tbody tr:focus-within,
+body.public-dark .public-ranking-table tbody tr:active,
+body.public-dark .public-ranking-table tbody tr.selected,
+body.public-dark .public-ranking-table tbody tr.active{
+  background:#16363b !important;
+  color:#ffffff !important;
+}
+
+/* Garante leitura de todos os textos dentro da linha */
+body.public-dark .public-ranking-table tbody tr:hover .public-name,
+body.public-dark .public-ranking-table tbody tr:hover .public-sub,
+body.public-dark .public-ranking-table tbody tr:hover .public-number,
+body.public-dark .public-ranking-table tbody tr:hover .num,
+body.public-dark .public-ranking-table tbody tr:focus-within .public-name,
+body.public-dark .public-ranking-table tbody tr:focus-within .public-sub,
+body.public-dark .public-ranking-table tbody tr:focus-within .public-number,
+body.public-dark .public-ranking-table tbody tr:focus-within .num{
+  color:#ffffff !important;
+}
+
+/* Chips de medidas continuam escuros/legíveis ao passar o mouse */
+body.public-dark .public-ranking-table tbody tr:hover .public-fish-chip,
+body.public-dark .public-ranking-table tbody tr:focus-within .public-fish-chip,
+body.public-dark .public-ranking-table tbody tr:active .public-fish-chip{
+  background:#21474d !important;
+  border-color:#356068 !important;
+  color:#ffffff !important;
+}
+
+/* A célula espaçadora final deve continuar transparente */
+body.public-dark .public-ranking-table tbody tr:nth-child(odd) > td.public-end-spacer,
+body.public-dark .public-ranking-table tbody tr:nth-child(even) > td.public-end-spacer,
+body.public-dark .public-ranking-table tbody tr:hover > td.public-end-spacer{
+  background:transparent !important;
+}
+
 </style>
 </head>
 <body>
