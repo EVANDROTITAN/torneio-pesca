@@ -2684,13 +2684,13 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     if(!publicModeNow() || publicPollBusy) return;
     publicPollBusy=true;
     try{
-      const url=PUBLIC_DB_URL+'?t='+Date.now();
+      const url=PUBLIC_DB_URL;
       const res=await fetch(url,{
         method:'GET',
         cache:'no-store',
         headers:{'Accept':'application/json'}
       });
-      if(!res.ok) throw new Error('HTTP '+res.status);
+      if(!res.ok){ markPublicStatus('erro de leitura '+res.status); throw new Error('HTTP '+res.status); }
       const data=await res.json();
 
       if(data){
