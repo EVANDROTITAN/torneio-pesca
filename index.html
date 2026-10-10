@@ -1267,6 +1267,72 @@ body.firebase-admin-authenticated #firebase-admin-menu-btn{
   font-weight:950 !important;
 }
 
+
+/* ===== TABELA MOBILE: TODOS OS PEIXES VISÍVEIS ATÉ 5 v8.7 ===== */
+@media(max-width:700px){
+  .public-table-card{overflow:hidden}
+  .public-table-scroll{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  /* Até 5 peixes: comprime para caber na tela inteira */
+  .public-ranking-table.fit-mobile{
+    min-width:0 !important;
+    width:100% !important;
+    table-layout:fixed;
+  }
+  .public-ranking-table.fit-mobile th,
+  .public-ranking-table.fit-mobile td{
+    padding:7px 3px !important;
+    font-size:.58rem !important;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .public-ranking-table.fit-mobile th:nth-child(1),
+  .public-ranking-table.fit-mobile td:nth-child(1){
+    width:28px;
+  }
+  .public-ranking-table.fit-mobile th:nth-child(2),
+  .public-ranking-table.fit-mobile td:nth-child(2){
+    width:104px;
+  }
+  .public-ranking-table.fit-mobile th:nth-child(3),
+  .public-ranking-table.fit-mobile td:nth-child(3),
+  .public-ranking-table.fit-mobile th:nth-child(4),
+  .public-ranking-table.fit-mobile td:nth-child(4){
+    width:52px;
+  }
+  .public-ranking-table.fit-mobile .public-participant{
+    min-width:0 !important;
+    gap:5px;
+  }
+  .public-ranking-table.fit-mobile .public-avatar{
+    width:26px;height:26px;
+  }
+  .public-ranking-table.fit-mobile .public-name{
+    font-size:.57rem;
+  }
+  .public-ranking-table.fit-mobile .public-sub,
+  .public-ranking-table.fit-mobile .public-format-tag{
+    display:none;
+  }
+  .public-ranking-table.fit-mobile .public-fish-chip{
+    min-width:0 !important;
+    width:auto;
+    padding:4px 2px;
+    font-size:.58rem;
+    border-radius:6px;
+  }
+
+  /* Mais de 5 peixes: mantém rolagem horizontal */
+  .public-ranking-table.scroll-mobile{
+    table-layout:auto;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3082,12 +3148,22 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       for(let i=1;i<=qtd;i++) html+=`<th class="num">P${i}</th>`;
       head.innerHTML=html;
     }
+
     const table=document.querySelector('.public-ranking-table');
     if(table){
-      // Ajusta a largura mínima conforme a quantidade de peixes.
-      const base=470;
-      const perFish=82;
-      table.style.minWidth=(base+(qtd*perFish))+'px';
+      table.classList.remove('fit-mobile','scroll-mobile');
+
+      if(qtd<=5){
+        table.classList.add('fit-mobile');
+        table.style.minWidth='0px';
+        table.style.width='100%';
+      }else{
+        table.classList.add('scroll-mobile');
+        const base=470;
+        const perFish=72;
+        table.style.minWidth=(base+(qtd*perFish))+'px';
+        table.style.width='100%';
+      }
     }
   }
 
