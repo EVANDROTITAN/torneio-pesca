@@ -3073,7 +3073,14 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 
   function applySavedTheme(){
     let saved='light';
-    try{ saved=localStorage.getItem('torneioPublicTheme')||'light'; }catch(e){}
+    try{
+      const p=new URLSearchParams(location.search);
+      const fromUrl=p.get('theme');
+      saved=fromUrl==='dark'||fromUrl==='light'
+        ? fromUrl
+        : (localStorage.getItem('torneioPublicTheme')||'light');
+      localStorage.setItem('torneioPublicTheme',saved);
+    }catch(e){}
     document.body.classList.toggle('public-dark',saved==='dark');
     const btn=document.getElementById('public-theme-btn');
     if(btn) btn.textContent=saved==='dark'?'☀️ Claro':'🌙 Escuro';
@@ -3081,7 +3088,13 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
   function toggleTheme(){
     const dark=!document.body.classList.contains('public-dark');
     document.body.classList.toggle('public-dark',dark);
-    try{ localStorage.setItem('torneioPublicTheme',dark?'dark':'light'); }catch(e){}
+    const theme=dark?'dark':'light';
+    try{
+      localStorage.setItem('torneioPublicTheme',theme);
+      const u=new URL(location.href);
+      u.searchParams.set('theme',theme);
+      history.replaceState(null,'',u.toString());
+    }catch(e){}
     const btn=document.getElementById('public-theme-btn');
     if(btn) btn.textContent=dark?'☀️ Claro':'🌙 Escuro';
   }
@@ -3100,7 +3113,10 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
   }
 
   function canonicalPublicUrl(){
-    return location.origin+location.pathname+'?public=1';
+    const u=new URL(location.origin+location.pathname);
+    u.searchParams.set('public','1');
+    if(document.body.classList.contains('public-dark')) u.searchParams.set('theme','dark');
+    return u.toString();
   }
   async function sharePublic(){
     const url=canonicalPublicUrl();
@@ -3124,8 +3140,13 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
   }
   function toggleTelao(){
     const u=new URL(location.href);
-    if(u.searchParams.get('telao')==='1')u.searchParams.delete('telao');
-    else u.searchParams.set('telao','1');
+    const opening=u.searchParams.get('telao')!=='1';
+    if(opening) u.searchParams.set('telao','1');
+    else u.searchParams.delete('telao');
+
+    // Leva o tema junto no link para o telão, inclusive em outro dispositivo.
+    u.searchParams.set('theme',document.body.classList.contains('public-dark')?'dark':'light');
+
     location.href=u.toString();
   }
 
