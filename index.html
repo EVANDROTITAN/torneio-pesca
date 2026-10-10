@@ -1229,6 +1229,23 @@ body.public-dark .public-qr-card p{color:#a9c3c5}
   .public-participant{min-width:190px}
 }
 
+
+/* ===== ADMIN: MENU SEMPRE DISPONÍVEL v8.4 ===== */
+body.firebase-admin-mode #btn-min-menu{
+  display:inline-flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+body.firebase-admin-mode #minimal-menu-overlay{
+  visibility:visible;
+}
+#firebase-admin-menu-btn{
+  display:none;
+}
+body.firebase-admin-authenticated #firebase-admin-menu-btn{
+  display:inline-flex;
+}
+
 </style>
 </head>
 <body>
@@ -2585,6 +2602,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
   <span id="firebase-live-status">Conectando...</span>
   <button class="btn btn-secondary" id="firebase-send-btn" type="button">☁️ Enviar dados atuais</button>
   <button class="btn btn-secondary" id="firebase-load-btn" type="button">⬇ Carregar da nuvem</button>
+  <button class="btn btn-secondary" id="firebase-admin-menu-btn" type="button">☰ Menu</button>
   <button class="btn btn-secondary" id="firebase-logout-btn" type="button">Sair</button>
 </div>
 <div class="firebase-public-live">● RANKING AO VIVO</div>
@@ -2747,6 +2765,18 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       if(errorBox){errorBox.textContent=friendlyError(err);errorBox.style.display='block'}
     }
   }
+
+  function ensureAdminControls(){
+    if(!isAdmin()) return;
+    document.body.classList.remove('public-view');
+    const menu=document.getElementById('btn-min-menu');
+    if(menu){
+      menu.style.setProperty('display','inline-flex','important');
+      menu.style.setProperty('visibility','visible','important');
+      menu.style.setProperty('opacity','1','important');
+    }
+  }
+
   async function boot(){
     const statusBox=document.getElementById('firebase-login-status');
     try{
@@ -2780,9 +2810,11 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
           user=currentUser||null;
           if(user){
             document.body.classList.add('firebase-admin-authenticated');
+            ensureAdminControls();
             setGate(false);
             setCloudStatus('Administrador conectado','ok');
             await loadCloud(false);
+            ensureAdminControls();
           }else{
             document.body.classList.remove('firebase-admin-authenticated');
             setGate(true);
@@ -2802,7 +2834,10 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     }
   }
   function wire(){
-    if(isAdmin())setGate(true);
+    if(isAdmin()){
+      setGate(true);
+      ensureAdminControls();
+    }
 
     document.getElementById('firebase-login-btn')?.addEventListener('click',doLogin);
     document.getElementById('firebase-admin-password')?.addEventListener('keydown',e=>{
@@ -2810,6 +2845,16 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     });
     document.getElementById('firebase-send-btn')?.addEventListener('click',()=>sendNow(true));
     document.getElementById('firebase-load-btn')?.addEventListener('click',()=>loadCloud(true));
+    document.getElementById('firebase-admin-menu-btn')?.addEventListener('click',()=>{
+      ensureAdminControls();
+      if(typeof openMinimalMenu==='function'){
+        openMinimalMenu();
+      }else{
+        const menu=document.getElementById('btn-min-menu');
+        if(menu) menu.click();
+        else alert('O menu administrativo não foi encontrado. Recarregue esta página usando ?admin=1.');
+      }
+    });
     document.getElementById('firebase-logout-btn')?.addEventListener('click',async()=>{
       try{await sdk?.signOut(auth)}catch(e){}
     });
