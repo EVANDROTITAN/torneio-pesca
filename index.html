@@ -1246,6 +1246,27 @@ body.firebase-admin-authenticated #firebase-admin-menu-btn{
   display:inline-flex;
 }
 
+
+/* ===== MENU ADMIN VISÍVEL NO TEMA CLARO v8.6 ===== */
+body.firebase-admin-mode #btn-min-menu{
+  background:#0b6570 !important;
+  color:#ffffff !important;
+  border:1px solid #0b6570 !important;
+  box-shadow:0 3px 10px rgba(5,74,82,.20) !important;
+  font-weight:900 !important;
+}
+body.firebase-admin-mode #btn-min-menu:hover{
+  filter:brightness(1.08) !important;
+}
+body.firebase-admin-authenticated #firebase-admin-menu-btn{
+  display:inline-flex !important;
+  background:#f4a340 !important;
+  color:#102326 !important;
+  border:1px solid #f4a340 !important;
+  opacity:1 !important;
+  font-weight:950 !important;
+}
+
 </style>
 </head>
 <body>
@@ -2953,9 +2974,8 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
       <div class="public-table-scroll">
         <table class="public-ranking-table">
           <thead>
-            <tr>
+            <tr id="public-cloud-head-row">
               <th>Pos</th><th>Participação</th><th class="num">Total</th><th class="num">Maior</th>
-              <th class="num">P1</th><th class="num">P2</th><th class="num">P3</th><th class="num">P4</th><th class="num">P5</th>
             </tr>
           </thead>
           <tbody id="public-cloud-body"></tbody>
@@ -3047,10 +3067,36 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     if(tie==='maior' && b.maior!==a.maior) return b.maior-a.maior;
     return titleOf(a).localeCompare(titleOf(b),'pt-BR');
   }
+
+  function fishCountFromState(st,comps){
+    const explicit=parseInt(st?.qtd,10);
+    if(Number.isFinite(explicit) && explicit>0) return Math.min(20,Math.max(1,explicit));
+    const inferred=Math.max(0,...(comps||[]).map(c=>Array.isArray(c.peixes)?c.peixes.length:0));
+    return inferred || 5;
+  }
+
+  function rebuildPublicFishColumns(qtd){
+    const head=document.getElementById('public-cloud-head-row');
+    if(head){
+      let html='<th>Pos</th><th>Participação</th><th class="num">Total</th><th class="num">Maior</th>';
+      for(let i=1;i<=qtd;i++) html+=`<th class="num">P${i}</th>`;
+      head.innerHTML=html;
+    }
+    const table=document.querySelector('.public-ranking-table');
+    if(table){
+      // Ajusta a largura mínima conforme a quantidade de peixes.
+      const base=470;
+      const perFish=82;
+      table.style.minWidth=(base+(qtd*perFish))+'px';
+    }
+  }
+
   function render(data){
     const st=data?.state||data;
     if(!st) return;
     const comps=normalizeCompetitors(st.competidores).sort((a,b)=>compare(a,b,st.tieBreak||'maior'));
+    const qtdPeixes=fishCountFromState(st,comps);
+    rebuildPublicFishColumns(qtdPeixes);
     const captures=comps.reduce((a,c)=>a+c.capturas,0);
     const record=Math.max(0,...comps.map(c=>c.maior));
 
@@ -3092,10 +3138,14 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 
     const body=document.getElementById('public-cloud-body');
     if(!comps.length){
-      body.innerHTML='<tr><td colspan="5" class="public-status-empty">Aguardando participantes...</td></tr>';
+      body.innerHTML=`<tr><td colspan="${4+qtdPeixes}" class="public-status-empty">Aguardando participantes...</td></tr>`;
     }else{
       body.innerHTML=comps.map((c,i)=>{
         const title=titleOf(c),people=peopleOf(c),photo=c.foto||fallbackAvatar(title);
+        let fishCells='';
+        for(let f=0;f<qtdPeixes;f++){
+          fishCells+=`<td class="num"><span class="public-fish-chip">${fishText(c,f)}</span></td>`;
+        }
         return `<tr>
           <td class="public-rank-num">${i+1}º</td>
           <td>
@@ -3110,11 +3160,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
           </td>
           <td class="public-number num">${c.total.toFixed(1).replace('.',',')} cm</td>
           <td class="num">${c.maior.toFixed(1).replace('.',',')} cm</td>
-          <td class="num"><span class="public-fish-chip">${fishText(c,0)}</span></td>
-          <td class="num"><span class="public-fish-chip">${fishText(c,1)}</span></td>
-          <td class="num"><span class="public-fish-chip">${fishText(c,2)}</span></td>
-          <td class="num"><span class="public-fish-chip">${fishText(c,3)}</span></td>
-          <td class="num"><span class="public-fish-chip">${fishText(c,4)}</span></td>
+          ${fishCells}
         </tr>`;
       }).join('');
     }
