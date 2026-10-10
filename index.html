@@ -1149,6 +1149,86 @@ body.public-telao .public-telao-badge{display:inline-flex}
   .public-podium-major{font-size:.58rem}
 }
 
+
+/* ===== TEMA ESCURO + POLIMENTO MOBILE v8.2 ===== */
+.public-theme-btn{min-width:92px}
+body.public-dark #public-cloud-view{
+  background:#071a1d;
+  color:#e8f5f4;
+}
+body.public-dark .public-cloud-top,
+body.public-dark .public-podium-wrap,
+body.public-dark .public-table-card{
+  background:#0d262a;
+  border-color:#1d4449;
+  box-shadow:0 8px 28px rgba(0,0,0,.32);
+}
+body.public-dark .public-cloud-title{
+  background:#163137;
+  border-color:#244b51;
+  color:#f5fbfb;
+}
+body.public-dark .public-cloud-brand{color:#80e5db}
+body.public-dark .public-cloud-live{color:#6fe0ae}
+body.public-dark .public-cloud-pill,
+body.public-dark .public-count,
+body.public-dark .public-action-btn{
+  background:#102f34;
+  color:#e7f6f4;
+  border-color:#285158;
+}
+body.public-dark .public-podium-card{
+  background:#102b30;
+  border-color:#31545a;
+}
+body.public-dark .public-podium-card.first{
+  background:linear-gradient(180deg,#3a3219,#102b30);
+  border-color:#b89d49;
+}
+body.public-dark .public-podium-card.second{border-color:#5f747a}
+body.public-dark .public-podium-card.third{border-color:#7f5a42}
+body.public-dark .public-section-kicker,
+body.public-dark .public-podium-people,
+body.public-dark .public-podium-major,
+body.public-dark .public-sub,
+body.public-dark .public-updated{
+  color:#a9c3c5;
+}
+body.public-dark .public-podium-name,
+body.public-dark .public-name{color:#f4fbfb}
+body.public-dark .public-podium-total,
+body.public-dark .public-number{color:#71ddd5}
+body.public-dark .public-ranking-table th{background:#0b6670;color:#fff}
+body.public-dark .public-ranking-table td{
+  border-bottom-color:#183d42;
+  color:#e8f5f4;
+  background:#0d262a;
+}
+body.public-dark .public-ranking-table tr:nth-child(even) td{background:#102c31}
+body.public-dark .public-fish-chip{
+  background:#16363b;border-color:#285158;color:#eaf7f6
+}
+body.public-dark .public-format-tag{
+  background:#3b2f1f;border-color:#6d542f;color:#f6c46b
+}
+body.public-dark .public-qr-card{
+  background:#0d262a;color:#f5fbfb;border:1px solid #285158
+}
+body.public-dark .public-qr-card p{color:#a9c3c5}
+.public-freshness{
+  font-weight:850;
+}
+@media(max-width:700px){
+  .public-cloud-actions{gap:5px}
+  .public-action-btn{padding:6px 7px;font-size:.59rem}
+  .public-theme-btn{min-width:76px}
+  .public-table-head{padding:11px 12px}
+  .public-ranking-table{min-width:900px}
+  .public-ranking-table th{padding:8px 8px;font-size:.62rem}
+  .public-ranking-table td{padding:9px 8px;font-size:.73rem}
+  .public-participant{min-width:190px}
+}
+
 </style>
 </head>
 <body>
@@ -2761,6 +2841,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
         <span class="public-count public-telao-badge">📺 MODO TELÃO</span>
         <button class="public-action-btn" id="public-share-btn" type="button">↗ Compartilhar</button>
         <button class="public-action-btn" id="public-qr-btn" type="button">▦ QR Code</button>
+        <button class="public-action-btn public-theme-btn" id="public-theme-btn" type="button">🌙 Escuro</button>
         <button class="public-action-btn" id="public-telao-btn" type="button">📺 Telão</button>
       </div>
     </div>
@@ -2786,7 +2867,10 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
         <div class="public-table-meta">
           <div>
             <div class="public-section-kicker">Classificação geral</div>
-            <div class="public-updated" id="public-cloud-updated">Aguardando atualização...</div>
+            <div class="public-updated">
+              <span id="public-cloud-updated">Aguardando atualização...</span>
+              <span class="public-freshness" id="public-cloud-freshness"></span>
+            </div>
           </div>
           <div class="public-count" id="public-cloud-count-pill">0 competidores</div>
         </div>
@@ -2904,7 +2988,9 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 
     const stamp=Number(data?.updatedAt||0);
     if(stamp){
+      lastUpdatedAt=stamp;
       document.getElementById('public-cloud-updated').textContent='Atualizado em '+new Date(stamp).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      updateFreshness();
     }
 
     const p=document.getElementById('public-cloud-podium');
@@ -2981,6 +3067,38 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     }
   }
 
+
+  let lastUpdatedAt=0;
+  let freshnessTimer=null;
+
+  function applySavedTheme(){
+    let saved='light';
+    try{ saved=localStorage.getItem('torneioPublicTheme')||'light'; }catch(e){}
+    document.body.classList.toggle('public-dark',saved==='dark');
+    const btn=document.getElementById('public-theme-btn');
+    if(btn) btn.textContent=saved==='dark'?'☀️ Claro':'🌙 Escuro';
+  }
+  function toggleTheme(){
+    const dark=!document.body.classList.contains('public-dark');
+    document.body.classList.toggle('public-dark',dark);
+    try{ localStorage.setItem('torneioPublicTheme',dark?'dark':'light'); }catch(e){}
+    const btn=document.getElementById('public-theme-btn');
+    if(btn) btn.textContent=dark?'☀️ Claro':'🌙 Escuro';
+  }
+  function updateFreshness(){
+    const el=document.getElementById('public-cloud-freshness');
+    if(!el || !lastUpdatedAt){ if(el) el.textContent=''; return; }
+    const sec=Math.max(0,Math.floor((Date.now()-lastUpdatedAt)/1000));
+    let txt='';
+    if(sec<5) txt=' • agora';
+    else if(sec<60) txt=` • há ${sec}s`;
+    else{
+      const min=Math.floor(sec/60);
+      txt=` • há ${min} min`;
+    }
+    el.textContent=txt;
+  }
+
   function canonicalPublicUrl(){
     return location.origin+location.pathname+'?public=1';
   }
@@ -3014,9 +3132,11 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
   function boot(){
     if(!isPublic()) return;
     document.body.classList.add('public-standalone');
+    applySavedTheme();
     try{
       if(new URLSearchParams(location.search).get('telao')==='1') document.body.classList.add('public-telao');
     }catch(e){}
+    document.getElementById('public-theme-btn')?.addEventListener('click',toggleTheme);
     document.getElementById('public-share-btn')?.addEventListener('click',sharePublic);
     document.getElementById('public-qr-btn')?.addEventListener('click',openQr);
     document.getElementById('public-qr-close')?.addEventListener('click',()=>document.getElementById('public-qr-modal')?.classList.remove('open'));
@@ -3026,6 +3146,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     document.getElementById('public-telao-btn')?.addEventListener('click',toggleTelao);
     load();
     setInterval(load,2500);
+    if(!freshnessTimer) freshnessTimer=setInterval(updateFreshness,1000);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
