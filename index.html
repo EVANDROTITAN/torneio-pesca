@@ -1457,6 +1457,26 @@ body.public-dark .public-scroll-hint{color:#a9c3c5;}
   .public-ranking-table td:nth-child(n+5){min-width:78px !important;width:78px !important;}
 }
 
+
+/* ===== v9.1 • RESPIRO APÓS A ÚLTIMA COLUNA ===== */
+.public-ranking-table th.public-end-spacer,
+.public-ranking-table td.public-end-spacer{
+  min-width:96px !important;
+  width:96px !important;
+  max-width:96px !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+}
+@media(max-width:700px){
+  .public-ranking-table th.public-end-spacer,
+  .public-ranking-table td.public-end-spacer{
+    min-width:110px !important;
+    width:110px !important;
+    max-width:110px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3162,7 +3182,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
           <div class="public-count" id="public-cloud-count-pill">0 competidores</div>
         </div>
       </div>
-      <div class="public-scroll-hint">← deslize a tabela para ver todas as medidas → <span id="public-fish-column-hint"></span></div>
+      <div class="public-scroll-hint">← deslize até o fim para ver o último peixe → <span id="public-fish-column-hint"></span></div>
       <div class="public-table-scroll">
         <table class="public-ranking-table">
           <thead>
@@ -3280,6 +3300,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
     if(head){
       let html='<th>Pos</th><th>Participação</th><th class="num">Total</th><th class="num">Maior</th>';
       for(let i=1;i<=qtd;i++) html+=`<th class="num">P${i}</th>`;
+      html+='<th class="public-end-spacer" aria-hidden="true"></th>';
       head.innerHTML=html;
     }
 
@@ -3353,7 +3374,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 
     const body=document.getElementById('public-cloud-body');
     if(!comps.length){
-      body.innerHTML=`<tr><td colspan="${4+qtdPeixes}" class="public-status-empty">Aguardando participantes...</td></tr>`;
+      body.innerHTML=`<tr><td colspan="${5+qtdPeixes}" class="public-status-empty">Aguardando participantes...</td></tr>`;
     }else{
       body.innerHTML=comps.map((c,i)=>{
         const title=titleOf(c),people=peopleOf(c),photo=c.foto||fallbackAvatar(title);
@@ -3376,6 +3397,7 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
           <td class="public-number num">${c.total.toFixed(1).replace('.',',')} cm</td>
           <td class="num">${c.maior.toFixed(1).replace('.',',')} cm</td>
           ${fishCells}
+          <td class="public-end-spacer" aria-hidden="true"></td>
         </tr>`;
       }).join('');
     }
