@@ -1022,6 +1022,73 @@ body.public-view.firebase-live-connected .firebase-public-live{display:block}
   filter:brightness(1.06) !important;
 }
 
+
+/* ===== VISUALIZADOR PÚBLICO INDEPENDENTE v8.0 ===== */
+#public-cloud-view{
+  display:none;position:fixed;inset:0;z-index:200000;
+  overflow:auto;background:#eef5f4;color:#123237;
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+body.public-standalone #public-cloud-view{display:block}
+.public-cloud-shell{width:min(1120px,96vw);margin:0 auto;padding:18px 0 40px}
+.public-cloud-top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:#ffffff;border:1px solid #d8e5e4;border-radius:16px;padding:12px 16px;
+  box-shadow:0 8px 28px rgba(10,48,53,.08);margin-bottom:12px
+}
+.public-cloud-brand{font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#0b6f79}
+.public-cloud-live{display:flex;align-items:center;gap:7px;font-size:.76rem;font-weight:900;color:#14865d}
+.public-cloud-live-dot{width:9px;height:9px;border-radius:50%;background:#22bf7b;box-shadow:0 0 0 4px rgba(34,191,123,.12)}
+.public-cloud-title{
+  background:#fff7ef;border:1px solid #f0e6dc;border-radius:14px;
+  padding:14px 16px;font-size:1.55rem;font-weight:950;color:#0a5964;margin-bottom:12px
+}
+.public-cloud-metrics{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.public-cloud-pill{background:#fff;border:1px solid #d9e4e4;border-radius:999px;padding:7px 10px;font-size:.76rem;font-weight:850}
+.public-podium-wrap{background:#fff;border:1px solid #d9e4e4;border-radius:18px;padding:14px;box-shadow:0 8px 28px rgba(10,48,53,.07);margin-bottom:12px}
+.public-section-kicker{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;font-weight:900;color:#667b7e}
+.public-section-title{font-size:1rem;font-weight:950;margin:2px 0 12px}
+.public-podium{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:end}
+.public-podium-card{
+  border:1px solid #dbe5e5;border-radius:16px;padding:14px;text-align:center;
+  min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fbfdfd
+}
+.public-podium-card.first{min-height:236px;border-color:#e6c768;background:linear-gradient(180deg,#fff8db,#fff)}
+.public-podium-card.second{border-color:#bdcbd0}.public-podium-card.third{border-color:#d9b08e}
+.public-podium-rank{font-size:.72rem;font-weight:900;margin-bottom:7px}
+.public-podium-photo{width:82px;height:82px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 5px 18px rgba(0,0,0,.15);background:#d9e6e5}
+.public-podium-name{font-weight:950;font-size:.98rem;margin-top:8px}
+.public-podium-people{font-size:.68rem;color:#667b7e;margin-top:3px;font-weight:700;line-height:1.3}
+.public-podium-total{font-size:1.3rem;font-weight:950;color:#0b6f79;margin-top:7px}
+.public-podium-major{font-size:.68rem;color:#667b7e;font-weight:750;margin-top:3px}
+.public-table-card{background:#fff;border:1px solid #d9e4e4;border-radius:18px;box-shadow:0 8px 28px rgba(10,48,53,.07);overflow:hidden}
+.public-table-head{padding:13px 15px;border-bottom:1px solid #e5eded;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.public-count{font-size:.74rem;font-weight:900;background:#f2f7f7;border:1px solid #dbe6e5;padding:6px 9px;border-radius:999px}
+.public-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.public-ranking-table{width:100%;border-collapse:collapse;min-width:720px}
+.public-ranking-table th{background:#096974;color:white;font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;padding:9px 10px;text-align:left}
+.public-ranking-table td{padding:10px;border-bottom:1px solid #edf1f1;font-size:.78rem;vertical-align:middle}
+.public-ranking-table tr:nth-child(even) td{background:#fbfdfd}
+.public-rank-num{font-weight:950;text-align:center;width:44px}
+.public-participant{display:flex;align-items:center;gap:9px;min-width:210px}
+.public-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#dce8e7;flex:0 0 auto}
+.public-name{font-weight:950}.public-sub{font-size:.65rem;color:#6c8082;font-weight:700;margin-top:2px}
+.public-number{font-weight:900;color:#0b6f79}.public-status-empty{text-align:center;padding:40px 15px;color:#6a7f82}
+.public-error{background:#fff1f1;border:1px solid #f2c4c4;color:#a52a2a;border-radius:12px;padding:11px 13px;font-size:.78rem;font-weight:800;margin-bottom:10px;display:none}
+.public-updated{font-size:.65rem;color:#6c8082;font-weight:700}
+@media(max-width:700px){
+  .public-cloud-shell{width:100%;padding:8px 8px 32px;box-sizing:border-box}
+  .public-cloud-top{border-radius:12px;padding:10px 12px}
+  .public-cloud-title{font-size:1.35rem;border-radius:12px;padding:12px}
+  .public-podium-wrap,.public-table-card{border-radius:14px}
+  .public-podium{grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .public-podium-card{min-height:190px;padding:9px 6px}.public-podium-card.first{min-height:208px}
+  .public-podium-photo{width:64px;height:64px}
+  .public-podium-name{font-size:.78rem}.public-podium-people{font-size:.57rem}
+  .public-podium-total{font-size:1.05rem}.public-podium-major{font-size:.58rem}
+  .public-cloud-brand,.public-cloud-live{font-size:.62rem}
+}
+
 </style>
 </head>
 <body>
@@ -2316,7 +2383,7 @@ function safeApplyPublicView(){
     if(el) el.remove();
   });
 
-  document.querySelectorAll('.edit-profile,.del-btn,.toggle,.save-state,#public-link-chip')
+  document.querySelectorAll('.config-panel,.edit-profile,.del-btn,.toggle,.save-state,#public-link-chip')
     .forEach(el=>el.remove());
 
   const stripText=document.querySelector('.strip-left span:last-child');
@@ -2623,102 +2690,186 @@ window.addEventListener('load',()=>setTimeout(safeApplyPublicView,50));
 </script>
 
 
-<script>
-/* ===== LEITURA PÚBLICA COMPATÍVEL v7.6 ===== */
-(function(){
-  const PUBLIC_DB_URL='https://torneio-pesca-default-rtdb.firebaseio.com/rankingAtual.json';
-  let lastRemoteStamp=0;
-  let publicPollBusy=false;
+<div id="public-cloud-view">
+  <div class="public-cloud-shell">
+    <div class="public-cloud-top">
+      <div class="public-cloud-brand">PLUS • PLACAR OFICIAL</div>
+      <div class="public-cloud-live"><span class="public-cloud-live-dot"></span><span id="public-live-label">CONECTANDO...</span></div>
+    </div>
 
-  function publicModeNow(){
+    <div class="public-cloud-title" id="public-cloud-title">🏆 Torneio de Pesca</div>
+
+    <div class="public-cloud-metrics">
+      <div class="public-cloud-pill">👥 <span id="public-cloud-count">0</span> participantes</div>
+      <div class="public-cloud-pill">🐟 <span id="public-cloud-captures">0</span> capturas</div>
+      <div class="public-cloud-pill">📏 Recorde <span id="public-cloud-record">0,0 cm</span></div>
+    </div>
+
+    <div id="public-cloud-error" class="public-error"></div>
+
+    <div class="public-podium-wrap">
+      <div class="public-section-kicker">Classificação ao vivo</div>
+      <div class="public-section-title">Pódio do torneio</div>
+      <div class="public-podium" id="public-cloud-podium"></div>
+    </div>
+
+    <div class="public-table-card">
+      <div class="public-table-head">
+        <div>
+          <div class="public-section-kicker">Classificação geral</div>
+          <div class="public-updated" id="public-cloud-updated">Aguardando atualização...</div>
+        </div>
+        <div class="public-count" id="public-cloud-count-pill">0 competidores</div>
+      </div>
+      <div class="public-table-scroll">
+        <table class="public-ranking-table">
+          <thead>
+            <tr>
+              <th>Pos</th><th>Participação</th><th>Total</th><th>Maior peixe</th><th>Capturas</th>
+            </tr>
+          </thead>
+          <tbody id="public-cloud-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  const DB='https://torneio-pesca-default-rtdb.firebaseio.com/rankingAtual.json';
+  let lastStamp=0;
+
+  function isPublic(){
     try{
       const p=new URLSearchParams(location.search);
-      if(p.get('admin')==='1') return false;
-      return p.get('public')==='1' || (location.hostname||'').toLowerCase().endsWith('.github.io');
-    }catch(e){ return false; }
+      return p.get('admin')!=='1' && (p.get('public')==='1' || location.hostname.toLowerCase().endsWith('.github.io'));
+    }catch(e){return false}
   }
 
-  function publicStorageKey(){
+  function num(v){
+    const n=parseFloat(String(v??'').replace(',','.'));
+    return Number.isFinite(n)?n:0;
+  }
+  function esc(s){
+    return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  }
+  function initials(name){
+    return String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'?';
+  }
+  function fallbackAvatar(name){
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#0b6f79"/><stop offset="1" stop-color="#f4a340"/></linearGradient></defs><rect width="120" height="120" rx="60" fill="url(#g)"/><text x="60" y="70" text-anchor="middle" font-family="Arial" font-size="38" font-weight="700" fill="white">${esc(initials(name))}</text></svg>`;
+    return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  }
+  function titleOf(c){
+    const m=(c.modalidade||'solo').toLowerCase();
+    return (m==='dupla'||m==='equipe') ? (c.grupo||c.nome||'Participação') : (c.nome||'Participante');
+  }
+  function peopleOf(c){
+    const m=(c.modalidade||'solo').toLowerCase();
+    if(m==='solo') return '';
+    const arr=[c.nome,c.membros].filter(Boolean);
+    return arr.join(' • ');
+  }
+  function normalizeCompetitors(raw){
+    const arr=Array.isArray(raw)?raw:Object.keys(raw||{}).sort((a,b)=>Number(a)-Number(b)).map(k=>raw[k]);
+    return arr.filter(Boolean).map(c=>{
+      const fish=Array.isArray(c.peixes)?c.peixes:Object.keys(c.peixes||{}).sort((a,b)=>Number(a)-Number(b)).map(k=>c.peixes[k]);
+      const vals=(fish||[]).map(num);
+      return {...c,peixes:vals,total:vals.reduce((a,b)=>a+b,0),maior:Math.max(0,...vals),capturas:vals.filter(x=>x>0).length};
+    });
+  }
+  function compare(a,b,tie='maior'){
+    if(b.total!==a.total) return b.total-a.total;
+    if(tie==='maior' && b.maior!==a.maior) return b.maior-a.maior;
+    return titleOf(a).localeCompare(titleOf(b),'pt-BR');
+  }
+  function render(data){
+    const st=data?.state||data;
+    if(!st) return;
+    const comps=normalizeCompetitors(st.competidores).sort((a,b)=>compare(a,b,st.tieBreak||'maior'));
+    const captures=comps.reduce((a,c)=>a+c.capturas,0);
+    const record=Math.max(0,...comps.map(c=>c.maior));
+
+    document.getElementById('public-cloud-title').textContent='🏆 '+(st.titulo||'Torneio de Pesca');
+    document.getElementById('public-cloud-count').textContent=comps.length;
+    document.getElementById('public-cloud-captures').textContent=captures;
+    document.getElementById('public-cloud-record').textContent=record.toFixed(1).replace('.',',')+' cm';
+    document.getElementById('public-cloud-count-pill').textContent=`${comps.length} competidor${comps.length===1?'':'es'}`;
+    document.getElementById('public-live-label').textContent='RANKING AO VIVO';
+
+    const stamp=Number(data?.updatedAt||0);
+    if(stamp){
+      document.getElementById('public-cloud-updated').textContent='Atualizado em '+new Date(stamp).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    }
+
+    const p=document.getElementById('public-cloud-podium');
+    const cards=[1,0,2].map(idx=>{
+      const rank=idx===0?1:idx===1?2:3;
+      const c=comps[idx];
+      const cls=rank===1?'first':rank===2?'second':'third';
+      const medal=rank===1?'🥇':rank===2?'🥈':'🥉';
+      if(!c){
+        return `<div class="public-podium-card ${cls}"><div class="public-podium-rank">${medal} ${rank}º lugar</div><div class="public-podium-name">Vaga disponível</div><div class="public-podium-total">—</div></div>`;
+      }
+      const title=titleOf(c), people=peopleOf(c), photo=c.foto||fallbackAvatar(title);
+      return `<div class="public-podium-card ${cls}">
+        <div class="public-podium-rank">${medal} ${rank}º lugar</div>
+        <img class="public-podium-photo" src="${esc(photo)}" alt="">
+        <div class="public-podium-name">${esc(title)}</div>
+        ${people?`<div class="public-podium-people">${esc(people)}</div>`:''}
+        <div class="public-podium-total">${c.total.toFixed(1).replace('.',',')} cm</div>
+        <div class="public-podium-major">Maior peixe: ${c.maior.toFixed(1).replace('.',',')} cm</div>
+      </div>`;
+    });
+    p.innerHTML=cards.join('');
+
+    const body=document.getElementById('public-cloud-body');
+    if(!comps.length){
+      body.innerHTML='<tr><td colspan="5" class="public-status-empty">Aguardando participantes...</td></tr>';
+    }else{
+      body.innerHTML=comps.map((c,i)=>{
+        const title=titleOf(c),people=peopleOf(c),photo=c.foto||fallbackAvatar(title);
+        return `<tr>
+          <td class="public-rank-num">${i+1}º</td>
+          <td><div class="public-participant"><img class="public-avatar" src="${esc(photo)}" alt=""><div><div class="public-name">${esc(title)}</div><div class="public-sub">${esc(people||c.categoria||c.modalidade||'')}</div></div></div></td>
+          <td class="public-number">${c.total.toFixed(1).replace('.',',')} cm</td>
+          <td>${c.maior.toFixed(1).replace('.',',')} cm</td>
+          <td>${c.capturas}</td>
+        </tr>`;
+      }).join('');
+    }
+  }
+  async function load(){
     try{
-      return typeof STORAGE_KEY!=='undefined' ? STORAGE_KEY : 'pescaUltra2025_tablet';
+      const r=await fetch(DB,{cache:'no-store',headers:{Accept:'application/json'}});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const data=await r.json();
+      document.getElementById('public-cloud-error').style.display='none';
+      if(!data){
+        document.getElementById('public-live-label').textContent='AGUARDANDO DADOS';
+        return;
+      }
+      const stamp=Number(data.updatedAt||0);
+      if(!stamp || stamp!==lastStamp){
+        render(data);
+        lastStamp=stamp||Date.now();
+      }
     }catch(e){
-      return 'pescaUltra2025_tablet';
+      const box=document.getElementById('public-cloud-error');
+      box.textContent='Não foi possível carregar o ranking online. Tentando novamente...';
+      box.style.display='block';
+      document.getElementById('public-live-label').textContent='RECONECTANDO';
     }
   }
-
-  function markPublicStatus(text){
-    const live=document.querySelector('.live-badge');
-    if(live) live.innerHTML='<span class="live-dot"></span> '+text;
+  function boot(){
+    if(!isPublic()) return;
+    document.body.classList.add('public-standalone');
+    load();
+    setInterval(load,2500);
   }
-
-  function applyPublicCloudData(payload){
-    if(!payload) return;
-    const state=payload.state || payload;
-    const stamp=Number(payload.updatedAt||0);
-
-    if(!state || typeof state!=='object') return;
-    if(stamp && stamp===lastRemoteStamp) return;
-
-    try{
-      localStorage.setItem(publicStorageKey(), JSON.stringify(state));
-      if(typeof carregarDoStorage==='function'){
-        carregarDoStorage();
-      }
-      if(typeof safeApplyPublicView==='function'){
-        safeApplyPublicView();
-      }
-      document.body.classList.add('firebase-live-connected');
-      markPublicStatus('ranking ao vivo');
-      lastRemoteStamp=stamp || Date.now();
-
-      const el=document.getElementById('last-update');
-      if(el && stamp){
-        el.textContent=new Date(stamp).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-      }
-    }catch(err){
-      console.error('Falha ao aplicar ranking público:',err);
-    }
-  }
-
-  async function pollPublicRanking(){
-    if(!publicModeNow() || publicPollBusy) return;
-    publicPollBusy=true;
-    try{
-      const url=PUBLIC_DB_URL;
-      const res=await fetch(url,{
-        method:'GET',
-        cache:'no-store',
-        headers:{'Accept':'application/json'}
-      });
-      if(!res.ok){ markPublicStatus('erro de leitura '+res.status); throw new Error('HTTP '+res.status); }
-      const data=await res.json();
-
-      if(data){
-        applyPublicCloudData(data);
-      }else{
-        markPublicStatus('aguardando dados');
-      }
-    }catch(err){
-      console.error('Leitura pública Firebase:',err);
-      markPublicStatus('offline • tentando novamente');
-    }finally{
-      publicPollBusy=false;
-    }
-  }
-
-  function startPublicFallback(){
-    if(!publicModeNow()) return;
-    markPublicStatus('conectando ao ranking...');
-    pollPublicRanking();
-    setTimeout(pollPublicRanking,700);
-    setInterval(pollPublicRanking,2500);
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',startPublicFallback);
-  }else{
-    startPublicFallback();
-  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
 
